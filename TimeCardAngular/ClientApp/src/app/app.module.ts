@@ -31,7 +31,7 @@ import { AdminGuard } from './guards/admin.guard';
     FormsModule,
     ReactiveFormsModule,
     RouterModule.forRoot([
-      { path: '', component: HomeComponent, pathMatch: 'full' },
+      { path: '', component: HomeComponent, pathMatch: 'full', canActivate: [AuthGuard] },
       { path: 'login', component: LoginComponent },
       { path: 'user-home', component: UserHomeComponent, canActivate: [AuthGuard] },
       { path: 'admin-home', component: AdminHomeComponent, canActivate: [AdminGuard] }

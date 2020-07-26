@@ -1,15 +1,35 @@
-<li class="nav-item" [routerLinkActive]='["link-active"]'>
-  <a class="nav-link text-dark" *ngIf="!userData.isLoggedIn" [routerLink]='["/login"]'>Login</a>
-</li>
-<li class="nav-item" [routerLinkActive]='["link-active"]'>
-  <a class="nav-link text-dark" *ngIf="userData.isLoggedIn && userData.role==userRole.User" [routerLink]='["/user-home"]' [routerLink]=''>UserHome</a>
-</li>
-<li class="nav-item" [routerLinkActive]='["link-active"]'>
-  <a class="nav-link text-dark" *ngIf="userData.isLoggedIn && userData.role==userRole.Admin" [routerLink]='["/admin-home"]' [routerLink]=''>AdminHome</a>
-</li>
-<li class="nav-item" [routerLinkActive]='["link-active"]'>
-  <a class="nav-link text-dark" *ngIf="userData.isLoggedIn" (click)=logout() [routerLink]=''>Logout</a>
-</li>
-<li class="nav-item" [routerLinkActive]='["link-active"]' *ngIf="userData.isLoggedIn">
-  <a class="nav-link text-dark">Welcome <b>{{userData.firstName}}</b> </a>
-</li>  
+<header>
+  <nav class="navbar navbar-expand-sm navbar-dark fixed-top" style="background-color:darkmagenta">
+    <div class="container">
+      <a class="navbar-brand" asp-area="" asp-controller="Work" asp-action="Index">TimeCard</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+              aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+        <div *ngIf="userData.isLoggedIn">
+          <button (click)="logout()" class="btn btn-sm btn-light ml-2">Log Out</button>
+          <p class="nav navbar-text navbar-right">You are logged in as {{userData.fullName}}</p>
+
+        </div>
+        <ul class="navbar-nav flex-grow-1">
+          <li class="nav-item nav-select-work">
+            <a class="nav-link" asp-area="" asp-controller="Work" asp-action="Index">Work</a>
+          </li>
+          <li class="nav-item nav-select-payment">
+            <a class="nav-link" asp-area="" asp-controller="Payment" asp-action="Index">Payment</a>
+          </li>
+          <li class="nav-item nav-select-job">
+            <a class="nav-link" asp-area="" asp-controller="Job" asp-action="Index">Jobs</a>
+          </li>
+          <li class="nav-item nav-select-account">
+            <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Index">Account</a>
+          </li>
+          <li class="nav-item nav-select-lookup">
+            <a class="nav-link" asp-area="" asp-controller="Lookup" asp-action="Index">Lookups</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>

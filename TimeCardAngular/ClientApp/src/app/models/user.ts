@@ -1,6 +1,6 @@
 export class User {
   userName: string;
-  firstName: string;
+  fullName: string;
   isLoggedIn: boolean;
   role: string;
 }   

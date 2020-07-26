@@ -1,6 +1,10 @@
-<body>
-  <app-nav-menu></app-nav-menu>
+<app-nav-menu></app-nav-menu>
+<div class="container mt-4 pb-3">
+  <router-outlet></router-outlet>
+</div>
+<footer class="border-top footer text-muted">
   <div class="container">
-    <router-outlet></router-outlet>
+    &copy; 2020 - TimeCard - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
   </div>
-</body>
+</footer>
+

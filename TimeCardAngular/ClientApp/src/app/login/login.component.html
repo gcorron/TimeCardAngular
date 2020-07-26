@@ -1,32 +1,45 @@
-<div class="col-md-6 offset-md-3 mt-5">
-  <div *ngIf="loginForm.errors?.invalidLogin" class="alert alert-danger mt-3 mb-0">
-    Username or Password is incorrect.
-  </div>
-  <div class="card">
-    <h5 class="card-header">JWT authentication with Angular and .NET Core 3</h5>
-    <div class="card-body">
-      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-        <div class="form-group">
-          <label for="username">Username</label>
-          <input type="text" formControlName="username" class="form-control" tabindex="1" autofocus
-                 [ngClass]="{ 'is-invalid': submitted && loginFormControl.username.errors }" />
-          <div *ngIf="submitted && loginFormControl.username.errors" class="invalid-feedback">
-            <div *ngIf="loginFormControl.username.errors.required">Username is required</div>
-          </div>
+  <h1>Log In</h1>
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <div class="form-group form-row">
+      <label for="username" class="col-2 col-form-label">User Name</label>
+      <div class="col-3"><input for="username" formControlName="username" class="form-control" autofocus /></div>
+    </div>
+
+    <div *ngIf="reset">
+      <div class="form-group form-row">
+        <label asp-for="NewPassword" class="col-2 col-form-label">New Password</label>
+        <div class="col-3"><input for="newPassword" formControlName="newPassword" type="password" class="form-control" /></div>
+        <input asp-for="Password" type="hidden" />
+      </div>
+      <div class="form-group form-row">
+        <label for="confirmNewPassword" class="col-2 col-form-label">Confirm New Password</label>
+        <div class="col-3"><input for="confirmNewPassword" formControlName="confirmNewPassword" type="password" class="form-control" /></div>
+      </div>
+    </div>
+
+    <div *ngIf="!reset" class="form-group form-row">
+      <label for="password" class="col-2 col-form-label">Password</label>
+      <div class="col-3"><input for="password" formControlName="password" type="password" class="form-control" /></div>
+    </div>
+
+    <div class="form-group form-row">
+      <div class="col-md-3 offset-2">
+        <div class="custom-control form-control custom-checkbox bg-transparent border-0" >
+          <input for="rememberMe" formControlName="rememberMe" class="custom-control-input" type="checkbox"/>
+          <label for="rememberMe" class="custom-control-label">Remember Me</label>
         </div>
-        <div class="form-group">
-          <label for="password">Password</label>
-          <input type="password" formControlName="password" class="form-control" tabindex="2"
-                 [ngClass]="{ 'is-invalid': submitted && loginFormControl.password.errors }" />
-          <div *ngIf="submitted && loginFormControl.password.errors" class="invalid-feedback">
-            <div *ngIf="loginFormControl.password.errors.required">Password is required</div>
-          </div>
-        </div>
+      </div>
+      <div class="col-1">
         <button [disabled]="loading" class="btn btn-primary">
           <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
           Login
         </button>
-      </form>
+      </div>
     </div>
-  </div>
-</div>
+    <div class="row">
+      <div *ngIf="loginForm.errors?.invalidLogin || message" class="alert alert-danger mt-3 mb-0 offset-2">
+        {{message}}
+      </div>
+    </div>
+    <input asp-for="Reset" type="hidden" />
+  </form>

@@ -23,7 +23,7 @@ export class AuthGuard implements CanActivate {
     if (this.userData.role == UserRole.User) {
       return true;
     }
-
+    console.log('navigating to login');
     this.router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
     return false;
   }

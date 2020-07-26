@@ -15,9 +15,11 @@ export class AuthService {
   constructor(private http: HttpClient, private router: Router) { }
 
   login(userDetails) {
-    return this.http.post<any>('/api/login', userDetails)
+    return this.http.post<any>('/api/Account/Login', userDetails)
       .pipe(map(response => {
-        localStorage.setItem('authToken', response.token);
+        if (response.token) {
+          localStorage.setItem('authToken', response.token);
+        }
         this.setUserDetails();
         return response;
       }));
@@ -29,10 +31,10 @@ export class AuthService {
       const decodeUserDetails = JSON.parse(window.atob(localStorage.getItem('authToken').split('.')[1]));
 
       userDetails.userName = decodeUserDetails.sub;
-      userDetails.firstName = decodeUserDetails.firstName;
+      userDetails.fullName = decodeUserDetails.fullName;
       userDetails.isLoggedIn = true;
       userDetails.role = decodeUserDetails.role;
-
+      console.log(userDetails);
       this.userData.next(userDetails);
     }
   }

@@ -12,9 +12,11 @@ import { AuthService } from '../services/auth.service';
 export class LoginComponent implements OnInit {
 
   loading = false;
+  reset = false;
   loginForm: FormGroup;
   submitted = false;
   returnUrl: string;
+  message: string;
 
   constructor(private formBuilder: FormBuilder,
     private route: ActivatedRoute,
@@ -24,7 +26,10 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
     this.loginForm = this.formBuilder.group({
       username: ['', Validators.required],
-      password: ['', Validators.required]
+      password: ['', Validators.required],
+      newPassword: [''],
+      confirmNewPassword: [''],
+      rememberMe: [true]
     });
   }
 
@@ -40,8 +45,15 @@ export class LoginComponent implements OnInit {
     this.authService.login(this.loginForm.value)
       .pipe(first())
       .subscribe(
-        () => {
-          this.router.navigate([returnUrl]);
+        (response) => {
+          this.loading = false;
+          this.message = null;
+          if (response.login) {
+            this.router.navigate([returnUrl]);
+          }
+          else {
+            this.message = response;
+          }
         },
         () => {
           this.loading = false;
