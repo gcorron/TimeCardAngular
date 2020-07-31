@@ -1,0 +1,59 @@
+<form novalidate [formGroup]="lookupForm" (ngSubmit)="submitForm(form)">
+  <tr class="row">
+    <div class="col-4 offset-4">
+      <select class="form-control" (input)="selectedGroupId" (change)="changeGroup($event.target.value)">
+        <option *ngFor="let item of lookupGroups;" value="{{item.value}}">{{item.text}}</option>
+      </select>
+    </div>
+  </tr>
+  <div class="card mt-3" *ngIf=lookups>
+    <div id="divEdit" class="card-body" [ngClass]='editLookup.id == 0 ? "bg-success" : "bg-info"'>
+      <div class="form-row">
+        <label for="descr" class="col-form-label col-md-1">Descr</label>
+        <div class="col-md-4"><input for="descr" [(ngModel)]="editLookup.descr" formControlName="descr" class="form-control" /></div>
+        <label for="val" class="col-form-label col-md-1">Value</label>
+        <div class="col-md-2"><input for="val" [(ngModel)]="editLookup.val" formControlName="val" class="form-control" /></div>
+        <div class="form-check col-md-2 offset-1 mt-1">
+          <label class="form-check-label col-form-label">
+            <input type="checkbox" [(ngModel)]="editLookup.active" formControlName="active" class="form-check-input">Active
+          </label>
+        </div>
+        <div id="divEditButtons" class="col-md-2 text-right">
+          <button class="btn btn-default fa fa-2x fa-check" name="buttonValue" value="Save"></button>
+          <button class="btn btn-default fa fa-2x fa-plus" type="button" id="btnAdd" style="display:none;"></button>
+          <button class="btn btn-default fa fa-2x fa-times" name="buttonValue" value="Delete" style="display:none;" onclick="return confirm('Delete are you sure?');"></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+<div *ngIf="lookups">
+  <div class="row mt-3" style="max-height:450px; overflow-y:auto; position:relative;">
+    <div class="col-md-12">
+      <table class="table table-sm table-striped table-hover">
+        <thead class="sticky">
+          <tr>
+            <th style="width:10%;">ID</th>
+            <th style="width:40%;">Description</th>
+            <th style="width:20%;">Value</th>
+            <th style="width:15%;">Active</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-template ngFor let-lu [ngForOf]="lookups">
+            <tr class="lookup-row" (click)="selectLookup(lu.id)">
+              <td>{{lu.id}}</td>
+              <td>{{lu.descr}}</td>
+              <td>{{lu.val}}</td>
+              <td><span [ngClass]='lu.Active ? "fa fa-check" : ""'>{{lu.active}}</span></td>
+              <td></td>
+            </tr>
+          </ng-template>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+

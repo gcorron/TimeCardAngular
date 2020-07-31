@@ -33,7 +33,7 @@ export class AuthService {
       userDetails.userName = decodeUserDetails.sub;
       userDetails.fullName = decodeUserDetails.fullName;
       userDetails.isLoggedIn = true;
-      userDetails.role = decodeUserDetails.role;
+      userDetails.roles = decodeUserDetails.roles.split(",");
       console.log(userDetails);
       this.userData.next(userDetails);
     }

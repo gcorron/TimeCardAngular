@@ -48,7 +48,7 @@ namespace TimeCardAngular.Controllers
                         break;
                     case "OK":
                         var roles = _AppUserRepo.GetUserRoles(login.UserId).Where(x => x.Active).Select(x => x.Descr);
-                        login.Role = roles.FirstOrDefault();
+                        login.Roles = String.Join(",", roles);
                         login.UserName = vm.UserName;
                         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(ConfigSetting("Jwt:SecretKey")));
                         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
@@ -56,7 +56,7 @@ namespace TimeCardAngular.Controllers
                         {
                             new Claim(JwtRegisteredClaimNames.Sub, login.UserName),
                             new Claim("fullName", login.UserFullName.ToString()),
-                            new Claim("role",login.Role),
+                            new Claim("roles", login.Roles),
                             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
                         };
                         var token = new JwtSecurityToken(

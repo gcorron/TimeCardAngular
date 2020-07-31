@@ -21,7 +21,8 @@ export class AdminGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 
-    if (this.userData.role === UserRole.Admin) {
+    if (this.userData.roles && this.userData.roles.find((role) => role == UserRole.Admin)) {
+      console.log('admin good');
       return true;
     }
 

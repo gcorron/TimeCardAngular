@@ -7,9 +7,9 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-        <div *ngIf="userData.isLoggedIn">
+        <div *ngIf="userData.isLoggedIn" class="navbar-right">
+          <p class="nav navbar-text">You are logged in as {{userData.fullName}}</p>
           <button (click)="logout()" class="btn btn-sm btn-light ml-2">Log Out</button>
-          <p class="nav navbar-text navbar-right">You are logged in as {{userData.fullName}}</p>
 
         </div>
         <ul class="navbar-nav flex-grow-1">
@@ -26,7 +26,7 @@
             <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Index">Account</a>
           </li>
           <li class="nav-item nav-select-lookup">
-            <a class="nav-link" asp-area="" asp-controller="Lookup" asp-action="Index">Lookups</a>
+            <a class="nav-link" routerLink ="lookup" >Lookups</a>
           </li>
         </ul>
       </div>

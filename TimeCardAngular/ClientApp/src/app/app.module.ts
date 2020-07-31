@@ -15,6 +15,7 @@ import { HttpInterceptorService } from './services/http-interceptor.service';
 import { ErrorInterceptorService } from './services/error-interceptor.service';
 import { AdminHomeComponent } from './admin-home/admin-home.component';
 import { AdminGuard } from './guards/admin.guard';
+import { LookupComponent } from './lookup/lookup.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { AdminGuard } from './guards/admin.guard';
     HomeComponent,
     LoginComponent,
     UserHomeComponent,
-    AdminHomeComponent
+    AdminHomeComponent,
+    LookupComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -33,6 +35,7 @@ import { AdminGuard } from './guards/admin.guard';
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full', canActivate: [AuthGuard] },
       { path: 'login', component: LoginComponent },
+      { path: 'lookup', component: LookupComponent, canActivate: [AdminGuard] },
       { path: 'user-home', component: UserHomeComponent, canActivate: [AuthGuard] },
       { path: 'admin-home', component: AdminHomeComponent, canActivate: [AdminGuard] }
     ])

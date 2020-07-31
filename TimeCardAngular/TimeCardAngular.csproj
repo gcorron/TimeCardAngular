@@ -25,7 +25,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\src\app\file.ts" />
+    <None Remove="ClientApp\src\app\form.lookup.ts" />
+    <None Remove="ClientApp\src\app\models\lookup.ts" />
     <None Remove="ClientApp\src\app\models\roles.ts" />
+    <None Remove="ClientApp\src\app\models\selectListItem.ts" />
     <None Remove="ClientApp\src\app\models\user.ts" />
   </ItemGroup>
 
@@ -34,6 +38,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\app\file.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\lookup\lookup.form.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\models\lookup.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\models\selectListItem.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\roles.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\user.ts" />
   </ItemGroup>
