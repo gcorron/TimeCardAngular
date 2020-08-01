@@ -16,6 +16,10 @@ import { ErrorInterceptorService } from './services/error-interceptor.service';
 import { AdminHomeComponent } from './admin-home/admin-home.component';
 import { AdminGuard } from './guards/admin.guard';
 import { LookupComponent } from './lookup/lookup.component';
+import { AccountComponent } from './account/account.component';
+import { JobComponent } from './job/job.component';
+import { PaymentComponent } from './payment/payment.component';
+import { WorkComponent } from './work/work.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +29,11 @@ import { LookupComponent } from './lookup/lookup.component';
     LoginComponent,
     UserHomeComponent,
     AdminHomeComponent,
-    LookupComponent
+    LookupComponent,
+    AccountComponent,
+    JobComponent,
+    PaymentComponent,
+    WorkComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -36,8 +44,10 @@ import { LookupComponent } from './lookup/lookup.component';
       { path: '', component: HomeComponent, pathMatch: 'full', canActivate: [AuthGuard] },
       { path: 'login', component: LoginComponent },
       { path: 'lookup', component: LookupComponent, canActivate: [AdminGuard] },
-      { path: 'user-home', component: UserHomeComponent, canActivate: [AuthGuard] },
-      { path: 'admin-home', component: AdminHomeComponent, canActivate: [AdminGuard] }
+      { path: 'account', component: AccountComponent, canActivate: [AdminGuard] },
+      { path: 'job', component: JobComponent, canActivate: [AdminGuard] },
+      { path: 'payment', component: PaymentComponent, canActivate: [AdminGuard] },
+      { path: 'work', component: WorkComponent, canActivate: [AdminGuard] },
     ])
   ],
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: HttpInterceptorService, multi: true },

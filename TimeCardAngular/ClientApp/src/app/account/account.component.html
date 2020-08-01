@@ -1,0 +1,83 @@
+<form autocomplete="off">
+  <div class="card mt-3">
+    <div class="card-body" [ngClass]="editAppUser == 0 ? 'bg-success' : 'bg-info'">
+      <div class="form-group form-row">
+        <div class="col-md-1 col-form-label text-right">User</div>
+        <div class="col-md-2">
+          <input asp-for="EditAppUser.UserId" type="hidden" />
+          <input asp-for="EditAppUser.UserName" class="form-control" />
+        </div>
+        <div class="col-md-1 col-form-label text-right">Full</div>
+        <div class="col-md-3"><input asp-for="EditAppUser.UserFullName" class="form-control" /></div>
+        <div class="col-md-1">
+          <div class="custom-control form-control custom-checkbox bg-transparent border-0">
+            <input asp-for="EditAppUser.Active" class="custom-control-input" />
+            <label asp-for="EditAppUser.Active" class="custom-control-label">Active</label>
+          </div>
+        </div>
+        <div class="col-md-1">
+          <div class="custom-control form-control custom-checkbox bg-transparent border-0">
+            <input asp-for="EditAppUser.Reset" class="custom-control-input" />
+            <label asp-for="EditAppUser.Reset" class="custom-control-label">Reset</label>
+          </div>
+        </div>
+        <div id="divEditButtons" class="col-md-3 text-right">
+          <button class="btn btn-default fa fa-2x fa-plus edit-button" type="button" id="btnAdd" title="Add" style="display:none;"></button>
+          <button class="btn btn-default fa fa-2x fa-times edit-button cancel" style="display:none;" value="Delete" name="buttonValue" title="Delete" onclick="return confirm('Delete are you sure?');"></button>
+          <button class="btn btn-default fa fa-2x fa-check" value="Save" name="buttonValue" title="Save"></button>
+        </div>
+      </div>
+      <div class="form-group form-row">
+        <div class="col-md-1 col-form-label text-right">Roles</div>
+        <div class="col-md-10">
+          <div class="form-check-inline"></div>
+          @for (int i = 0, j = Model.EditAppUser.Roles.Length; i < j; i++)
+          {
+          <div class="form-check-inline">
+            <div class="custom-control form-control custom-checkbox bg-transparent border-0">
+              <input asp-for="EditAppUser.Roles[i].Active" class="custom-control-input role-edit-active" />
+              <input asp-for="EditAppUser.Roles[i].Id" type="hidden" />
+              <label asp-for="EditAppUser.Roles[i].Active" class="custom-control-label" style="color:#212529;">@Model.EditAppUser.Roles[i].Descr</label>
+            </div>
+          </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <table class="table table-hover table-striped table-sm">
+    <thead>
+      <tr>
+        <th>User Name</th>
+        <th>Full Name</th>
+        <th>Active</th>
+        <th>Last Login</th>
+        <th>Roles</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      @foreach (var user in Model.AppUsers)
+      {
+      <tr class="tr-clickable" data-edit=@Json.Serialize(new { user.UserId, user.ContractorId, user.Active, RoleIds=user.Roles.Select(x =>
+        x.Id) }) style="cursor:pointer;">
+        <td>@user.UserName</td>
+        <td>@user.UserFullName</td>
+        <td>@user.Active</td>
+        <td>@user.LastLogin</td>
+        <td>@(string.Join(", ", user.Roles.Select(x => x.Descr).ToArray()))</td>
+        <td><button class="btn btn-default btn-address fa fa-address-card" title="Address/Rate" type="button" style="display:@(user.Roles.Where(x => x.Descr==" Contractor").Any() ? "normal" : "none" );"></button></td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</form>
+
+<div id="addressModal" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+    </div>
+  </div>
+
+</div>

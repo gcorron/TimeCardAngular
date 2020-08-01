@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using TimeCard.Domain;
 using TimeCardAngular.Models;
 
 namespace TimeCardAngular.Controllers
@@ -18,46 +19,20 @@ namespace TimeCardAngular.Controllers
         {
 
         }
-        [HttpGet]
-        public IActionResult Index()
-        {
-            var vm = new LookupViewModel { EditLookup = new TimeCard.Domain.Lookup() };
-            prepIndex(vm);
-            return Ok(vm);
-        }
+
+        [Route("Save")]
         [HttpPost]
-        public IActionResult Index(LookupViewModel vm, string buttonValue)
+        public void Save(Lookup editLookup)
         {
-            switch (buttonValue)
-            {
-                case "Save":
-                    if (ModelState.IsValid)
-                    {
-                        vm.EditLookup.GroupId = vm.SelectedGroupId;
-                        LookupRepo.SaveLookup(vm.EditLookup);
-                        vm.EditLookup = new TimeCard.Domain.Lookup();
-                        ModelState.Clear();
-                    }
-                    break;
-                case "Delete":
-                    LookupRepo.DeleteLookup(vm.EditLookup.Id);
-                    break;
-                default:
-                    vm.EditLookup = new TimeCard.Domain.Lookup();
-                    ModelState.Clear();
-                    break;
-            }
-            prepIndex(vm);
-            return Ok(vm);
+            LookupRepo.SaveLookup(editLookup);
         }
-        void prepIndex(LookupViewModel vm)
+
+        [Route("Delete")]
+        public void Delete(Lookup editLookup)
         {
-            vm.LookupGroups = LookupRepo.GetGroups().Select(x => new SelectListItem { Value = x.GroupId.ToString(), Text = x.Descr });
-            if (vm.SelectedGroupId != 0)
-            {
-                vm.Lookups = LookupRepo.GetLookups(vm.SelectedGroupId);
-            }
+            LookupRepo.DeleteLookup(editLookup.Id);
         }
+
 
         [Route("LookupGroups")]
         [HttpGet]

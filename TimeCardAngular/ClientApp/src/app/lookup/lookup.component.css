@@ -1,0 +1,6 @@
+input.ng-invalid.submitted {
+  border: 2px solid #ff0000
+}
+input.ng-dirty.ng-valid.submitted {
+  border: 2px solid #6bc502
+}

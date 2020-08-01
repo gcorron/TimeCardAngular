@@ -20,12 +20,18 @@ export class LookupService {
   }
 
   lookups(groupId: number): Observable<Lookup[]> {
-    console.log('lookups ' + groupId);
     return this.http.get<Lookup[]>('/api/Lookup/Lookups', { params: new HttpParams().set("groupId", groupId.toString()) } )
       .pipe(map(response => {
         return response;
       }));
   }
 
+  save(editLookup: Lookup): Observable<void> {
+    return this.http.post('/api/Lookup/Save', editLookup).pipe(map( () => null));
+  }
+
+  delete(editLookup: Lookup): Observable<void> {
+    return this.http.post('/api/Lookup/Delete', editLookup).pipe(map(() => null));
+  }
 
 }

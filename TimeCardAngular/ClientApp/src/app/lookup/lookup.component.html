@@ -1,4 +1,4 @@
-<form novalidate [formGroup]="lookupForm" (ngSubmit)="submitForm(form)">
+<form novalidate [formGroup]="lookupForm">
   <tr class="row">
     <div class="col-4 offset-4">
       <select class="form-control" (input)="selectedGroupId" (change)="changeGroup($event.target.value)">
@@ -10,18 +10,18 @@
     <div id="divEdit" class="card-body" [ngClass]='editLookup.id == 0 ? "bg-success" : "bg-info"'>
       <div class="form-row">
         <label for="descr" class="col-form-label col-md-1">Descr</label>
-        <div class="col-md-4"><input for="descr" [(ngModel)]="editLookup.descr" formControlName="descr" class="form-control" /></div>
+        <div class="col-md-4"><input for="descr" [(ngModel)]="editLookup.descr" formControlName="descr" class="form-control" [ngClass]="submitted ? 'submitted':''"/></div>
         <label for="val" class="col-form-label col-md-1">Value</label>
         <div class="col-md-2"><input for="val" [(ngModel)]="editLookup.val" formControlName="val" class="form-control" /></div>
-        <div class="form-check col-md-2 offset-1 mt-1">
-          <label class="form-check-label col-form-label">
+        <div class="form-check col-md-1 offset-1 mt-1">
+          <label class="form-check-label">
             <input type="checkbox" [(ngModel)]="editLookup.active" formControlName="active" class="form-check-input">Active
           </label>
         </div>
         <div id="divEditButtons" class="col-md-2 text-right">
-          <button class="btn btn-default fa fa-2x fa-check" name="buttonValue" value="Save"></button>
-          <button class="btn btn-default fa fa-2x fa-plus" type="button" id="btnAdd" style="display:none;"></button>
-          <button class="btn btn-default fa fa-2x fa-times" name="buttonValue" value="Delete" style="display:none;" onclick="return confirm('Delete are you sure?');"></button>
+          <button class="btn btn-default fa fa-2x fa-check" (click)="save()"></button>
+          <button class="btn btn-default fa fa-2x fa-plus" type="button" *ngIf="editLookup.id != 0" (click)="add()"></button>
+          <button class="btn btn-default fa fa-2x fa-times" type="button" *ngIf="editLookup.id != 0" (click)="delete()"></button>
         </div>
       </div>
     </div>
@@ -41,15 +41,13 @@
           </tr>
         </thead>
         <tbody>
-          <ng-template ngFor let-lu [ngForOf]="lookups">
-            <tr class="lookup-row" (click)="selectLookup(lu.id)">
-              <td>{{lu.id}}</td>
-              <td>{{lu.descr}}</td>
-              <td>{{lu.val}}</td>
-              <td><span [ngClass]='lu.Active ? "fa fa-check" : ""'>{{lu.active}}</span></td>
-              <td></td>
-            </tr>
-          </ng-template>
+          <tr *ngFor="let lu of lookups" [ngClass]="editLookup.id == lu.id ? 'bg-info' : ''" (click)="select(lu.id)">
+            <td>{{lu.id}}</td>
+            <td>{{lu.descr}}</td>
+            <td>{{lu.val}}</td>
+            <td><span [ngClass]="lu.active ? 'fa fa-check' : ''"></span></td>
+            <td></td>
+          </tr>
         </tbody>
       </table>
     </div>

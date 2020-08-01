@@ -17,6 +17,7 @@ export class LookupComponent implements OnInit {
   lookupGroups: SelectListItem[];
   selectedGroupId: number;
   editLookup: Lookup;
+  submitted: boolean;
   lookups: Lookup[];
   constructor(private formBuilder: FormBuilder,
     private route: ActivatedRoute,
@@ -29,14 +30,56 @@ export class LookupComponent implements OnInit {
 
   changeGroup(id: string) {
     this.selectedGroupId = Number(id);
-    this.editLookup = new Lookup();
-    this.editLookup.id = 0;
+    this.clear();
     this.editLookup.active = true;
+    
     this.lookupService.lookups(this.selectedGroupId).subscribe(lookups => this.lookups = lookups); 
   }
-  selectLookup(selectedId: number) {
+
+  select(selectedId: number) {
+    this.submitted = false;
     const editLookup = this.lookups.find(lu => lu.id == selectedId);
-    this.editLookup = editLookup;
+    Object.assign(this.editLookup, editLookup);
+  }
+
+  save() {
+    const isNew: boolean = this.editLookup.id == 0;
+    const editLookup : Lookup = isNew ? new Lookup() : this.lookups.find(lu => lu.id == this.editLookup.id);
+    this.editLookup.groupId = this.selectedGroupId;
+    this.submitted = true;
+
+    if (!this.lookupForm.valid) {
+      return;
+    }
+
+    this.lookupService.save(this.editLookup)
+      .subscribe(() => {
+        Object.assign(editLookup, this.editLookup)
+        if (isNew) {
+          this.changeGroup(this.selectedGroupId.toString());
+        }
+      });
+  }
+
+  delete() {
+    if (!confirm('Delete are you sure?')) {
+      return;
+    }
+    this.lookupService.delete(this.editLookup)
+      .subscribe(() => {
+        const i = this.lookups.findIndex(lu => lu.id == this.editLookup.id);
+        this.lookups.splice(i, 1);
+        this.clear();
+      });
+  }
+
+  add() {
+    this.clear();
+  }
+
+  private clear() {
+    this.editLookup = new Lookup();
+    this.submitted = false;
   }
 
 }
