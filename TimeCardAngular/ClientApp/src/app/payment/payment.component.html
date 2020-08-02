@@ -1,1 +1,11 @@
-<p>payment works!</p>
+<ul ngbNav #nav="ngbNav" class="nav-tabs">
+    <li ngbNavItem>
+        <a ngbNavLink class="active">Summary</a>
+        <ng-template ngbNavContent><payment-summary></payment-summary></ng-template>
+    </li>
+    <li ngbNavItem>
+      <a ngbNavLink>Edit</a>
+      <ng-template ngbNavContent><payment-edit></payment-edit></ng-template>
+    </li>
+</ul>
+<div [ngbNavOutlet]="nav"></div>

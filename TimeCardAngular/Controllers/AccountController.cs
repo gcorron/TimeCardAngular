@@ -27,6 +27,19 @@ namespace TimeCardAngular.Controllers
         {
             _AppUserRepo = new AppUserRepo(ConnString);
         }
+
+        [Route("Get")]
+        [HttpGet]
+        public IActionResult Get()
+        {
+            var appUsers = _AppUserRepo.GetAppUsers().OrderBy(x => x.UserName);
+            foreach (var user in appUsers)
+            {
+                user.Roles = _AppUserRepo.GetUserRoles(user.UserId).Where(x => x.Active).Select(x => x.Descr).OrderBy(x => x).ToArray();
+            }
+            return Ok(appUsers);
+        }
+
         [Route("Login")]
         [HttpPost]
         public IActionResult Login(LoginViewModel vm)
@@ -81,12 +94,6 @@ namespace TimeCardAngular.Controllers
                 }
             }
             return Ok(message);
-        }
-        [Route("Test")]
-        [HttpGet]
-        public IActionResult Test()
-        {
-            return Ok(new { result = "OK" });
         }
     }
 }

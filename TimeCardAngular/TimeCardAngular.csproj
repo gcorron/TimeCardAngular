@@ -27,23 +27,30 @@
   <ItemGroup>
     <None Remove="ClientApp\src\app\file.ts" />
     <None Remove="ClientApp\src\app\form.lookup.ts" />
+    <None Remove="ClientApp\src\app\models\appUser.ts" />
     <None Remove="ClientApp\src\app\models\lookup.ts" />
     <None Remove="ClientApp\src\app\models\roles.ts" />
     <None Remove="ClientApp\src\app\models\selectListItem.ts" />
     <None Remove="ClientApp\src\app\models\user.ts" />
+    <None Remove="ClientApp\src\app\payment\paymentEdit.component.ts" />
+    <None Remove="ClientApp\src\app\payment\paymentSummary.component.ts" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\TimeCardCore\TimeCard.Repo\TimeCard.Repo.csproj" />
+    <ProjectReference Include="TimeCard.Domain\TimeCard.Domain.csproj" />
+    <ProjectReference Include="TimeCard.Repo\TimeCard.Repo.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\src\app\file.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\lookup\lookup.form.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\models\appUser.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\lookup.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\selectListItem.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\roles.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\user.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\payment\paymentEdit.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\payment\paymentSummary.component.ts" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

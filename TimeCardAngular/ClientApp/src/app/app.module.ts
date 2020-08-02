@@ -9,17 +9,18 @@ import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
 
 import { LoginComponent } from './login/login.component';
-import { UserHomeComponent } from './user-home/user-home.component';
 import { AuthGuard } from './guards/auth.guard';
 import { HttpInterceptorService } from './services/http-interceptor.service';
 import { ErrorInterceptorService } from './services/error-interceptor.service';
-import { AdminHomeComponent } from './admin-home/admin-home.component';
 import { AdminGuard } from './guards/admin.guard';
 import { LookupComponent } from './lookup/lookup.component';
 import { AccountComponent } from './account/account.component';
 import { JobComponent } from './job/job.component';
 import { PaymentComponent } from './payment/payment.component';
+import { PaymentSummaryComponent } from './payment/paymentSummary.component';
+import { PaymentEditComponent } from './payment/paymentEdit.component';
 import { WorkComponent } from './work/work.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -27,21 +28,21 @@ import { WorkComponent } from './work/work.component';
     NavMenuComponent,
     HomeComponent,
     LoginComponent,
-    UserHomeComponent,
-    AdminHomeComponent,
     LookupComponent,
     AccountComponent,
     JobComponent,
     PaymentComponent,
-    WorkComponent
+    PaymentSummaryComponent,
+    PaymentEditComponent,
+    WorkComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
+    NgbModule,
     ReactiveFormsModule,
     RouterModule.forRoot([
-      { path: '', component: HomeComponent, pathMatch: 'full', canActivate: [AuthGuard] },
       { path: 'login', component: LoginComponent },
       { path: 'lookup', component: LookupComponent, canActivate: [AdminGuard] },
       { path: 'account', component: AccountComponent, canActivate: [AdminGuard] },
