@@ -28,6 +28,13 @@ namespace TimeCardAngular.Controllers
             _AppUserRepo = new AppUserRepo(ConnString);
         }
 
+        [Route("Roles")]
+        [HttpGet]
+        public IActionResult Roles()
+        {
+            return Ok(_AppUserRepo.GetUserRoles(0).OrderBy(x => x.Descr));
+        }
+
         [Route("Get")]
         [HttpGet]
         public IActionResult Get()
@@ -35,9 +42,28 @@ namespace TimeCardAngular.Controllers
             var appUsers = _AppUserRepo.GetAppUsers().OrderBy(x => x.UserName);
             foreach (var user in appUsers)
             {
-                user.Roles = _AppUserRepo.GetUserRoles(user.UserId).Where(x => x.Active).Select(x => x.Descr).OrderBy(x => x).ToArray();
+                user.Roles = _AppUserRepo.GetUserRoles(user.UserId);
             }
             return Ok(appUsers);
+        }
+
+        [Route("Save")]
+        [HttpPost]
+        public void Save(AppUser appUser)
+        {
+            _AppUserRepo.SaveAppUser(appUser);
+            _AppUserRepo.DeleteUserRoles(appUser.UserId);
+            foreach (var role in appUser.Roles.Where(x => x.Active))
+            {
+                _AppUserRepo.SaveUserRole(appUser.UserId, role.Id);
+            }
+
+        }
+
+        [Route("Delete")]
+        public void Delete(AppUser appUser)
+        {
+            _AppUserRepo.DeleteAppUser(appUser.UserId);
         }
 
         [Route("Login")]
@@ -95,5 +121,26 @@ namespace TimeCardAngular.Controllers
             }
             return Ok(message);
         }
+
+        [Route("GetContractor")]
+        [HttpGet]
+        public IActionResult GetContractor(int userId)
+        {
+            var contractor = _AppUserRepo.GetContractor(userId);
+            if (contractor == null)
+            {
+                contractor = new Contractor { ContractorId = userId };
+            }
+            return Ok(contractor);
+        }
+
+        [Route("SaveContractor")]
+        [HttpPost]
+        public IActionResult SaveContractor(Contractor contractor)
+        {
+            _AppUserRepo.SaveContractor(contractor);
+            return Ok(true);
+        }
+
     }
 }

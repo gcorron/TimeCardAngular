@@ -28,6 +28,9 @@
     <None Remove="ClientApp\src\app\file.ts" />
     <None Remove="ClientApp\src\app\form.lookup.ts" />
     <None Remove="ClientApp\src\app\models\appUser.ts" />
+    <None Remove="ClientApp\src\app\models\contractor.ts" />
+    <None Remove="ClientApp\src\app\models\dateRef.ts" />
+    <None Remove="ClientApp\src\app\models\job.ts" />
     <None Remove="ClientApp\src\app\models\lookup.ts" />
     <None Remove="ClientApp\src\app\models\roles.ts" />
     <None Remove="ClientApp\src\app\models\selectListItem.ts" />
@@ -45,6 +48,9 @@
     <TypeScriptCompile Include="ClientApp\src\app\file.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\lookup\lookup.form.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\appUser.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\models\contractor.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\models\dateRef.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\models\job.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\lookup.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\selectListItem.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\roles.ts" />

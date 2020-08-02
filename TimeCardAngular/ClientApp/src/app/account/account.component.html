@@ -4,10 +4,10 @@
       <div class="form-group form-row">
         <div class="col-md-1 col-form-label text-right">User</div>
         <div class="col-md-2">
-          <input [(ngModel)]="editAppUser.userName" name="userName" class="form-control" required maxlength="20"/>
+          <input [(ngModel)]="editAppUser.userName" name="userName" class="form-control" required maxlength="20" />
         </div>
         <div class="col-md-1 col-form-label text-right">Full</div>
-        <div class="col-md-3"><input [(ngModel)]="editAppUser.userFullName" name="userFullName" class="form-control" required maxlength="50"/></div>
+        <div class="col-md-3"><input [(ngModel)]="editAppUser.userFullName" name="userFullName" class="form-control" required maxlength="50" /></div>
         <div class="form-check col-md-1 offset-1">
           <label class="form-check-label">
             <input type="checkbox" [(ngModel)]="editAppUser.active" name="active" class="form-check-input">Active
@@ -23,14 +23,13 @@
         </div>
       </div>
       <div class="form-group form-row">
-        <div class="col-md-1 col-form-label text-right">Roles</div>
-        <div class="col-md-10">
-          <div class="form-check-inline"></div>
-          <div *ngFor="let role of roles" class="form-check-inline">
-            <div class="custom-control form-control custom-checkbox bg-transparent border-0">
-              <input asp-for="EditAppUser.Roles[i].Active" class="custom-control-input role-edit-active" />
-              <input asp-for="EditAppUser.Roles[i].Id" type="hidden" />
-              <label asp-for="EditAppUser.Roles[i].Active" class="custom-control-label" style="color:#212529;">@Model.EditAppUser.Roles[i].Descr</label>
+        <div class="col-md-1 text-right"><strong>Roles</strong></div>
+        <div class="col-md-11">
+          <div *ngFor="let role of roles; let i=index" class="form-check-inline">
+            <div class="form-check-inline">
+              <label class="form-check-label" [for]="role.descr">
+                <input type="checkbox" class="form-check-input" [(ngModel)]="roles[i].active" [name]="role.descr">{{role.descr}}
+              </label>
             </div>
           </div>
         </div>
@@ -55,17 +54,53 @@
         <td>{{user.userFullName}}</td>
         <td><span [ngClass]="user.active ? 'fa fa-check' : ''"></span></td>
         <td>{{user.lastLogin | date }}</td>
-        <td>{{user.roles.join()}}</td>
-        <td><button class="btn btn-default btn-address fa fa-address-card" title="Address/Rate" type="button" *ngIf="isContractor(user)"></button></td>
+        <td>{{displayRoles(user)}}</td>
+        <td><button class="btn btn-default btn-address fa fa-address-card" title="Address/Rate" type="button" *ngIf="isContractor(user)" (click)="getAddress(modal, user.contractorId)"></button></td>
       </tr>
     </tbody>
   </table>
 </form>
 
-<div id="addressModal" class="modal fade">
-  <div class="modal-dialog">
-    <div class="modal-content">
+<ng-template #modal let-modal>
+  <div class="modal-content">
+    <div class="modal-header bg-secondary">
+      <h5 class="text-light">Contractor Invoice Data</h5>
+      <button type="button" title="Close" (click)="modal.dismiss()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form #formAddress="ngForm" autocomplete="off">
+        <div class="row">
+          <div *ngIf="contractorSubmitted && formAddress.invalid" class="alert alert-danger col-md-12">
+            <ul>
+              <li *ngFor="let error of validationSummary(formAddress)">{{error}}</li>
+            </ul>
+          </div>
+        </div>
+        <div class="form-group form-row">
+          <label class="col-4 col-form-label text-right">Invoice Name</label>
+          <div class="col-8">
+            <input name="invoiceName" [(ngModel)]="this.contractor.invoiceName" maxlength="50" required class="form-control" />
+          </div>
+        </div>
+        <div class="form-group form-row">
+          <div class="col-4 col-form-label text-right">Invoice Address</div>
+          <div class="col-8">
+            <textarea name="invoiceAddress" [(ngModel)]="this.contractor.invoiceAddress" maxlength="250" required class="form-control" rows="3"></textarea>
+          </div>
+        </div>
+        <div class="form-group form-row">
+          <div class="col-4 col-form-label text-right">Rate</div>
+          <div class="col-4">
+            <input name="rate" [(ngModel)]="this.contractor.rate" max="999" min="0" step="1" required class="form-control" type="number" />
+          </div>
+          <div class="col-4 text-right">
+            <button id="btnSaveContractor" class="btn btn-default fa fa-2x fa-check" type="button" title="Save" (click)="saveAddress(formAddress)"></button>
+          </div>
+        </div>
+      </form>
     </div>
   </div>
+</ng-template>
 
-</div>

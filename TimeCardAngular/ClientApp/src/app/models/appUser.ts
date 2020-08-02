@@ -8,11 +8,11 @@ export class AppUser {
   reset: boolean;
   lastLogin: string;
   contractorId: number;
-  roles: string[];
+  roles: Lookup[];
 
   constructor() {
     this.userId = 0;
-    this.active = false;
+    this.active = true;
     this.reset = false;
     this.contractorId = 0;
   }

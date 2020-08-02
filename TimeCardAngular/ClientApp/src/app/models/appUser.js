@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var AppUser = /** @class */ (function () {
     function AppUser() {
         this.userId = 0;
-        this.active = false;
+        this.active = true;
         this.reset = false;
         this.contractorId = 0;
     }
