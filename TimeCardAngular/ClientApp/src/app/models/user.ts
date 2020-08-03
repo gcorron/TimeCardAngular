@@ -3,4 +3,5 @@ export class User {
   fullName: string;
   isLoggedIn: boolean;
   roles: string[];
+  contractorId: number;
 }   

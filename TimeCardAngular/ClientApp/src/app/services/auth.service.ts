@@ -25,7 +25,7 @@ export class AuthService {
       }));
   }
 
-  setUserDetails() {
+  setUserDetails()  {
     if (localStorage.getItem('authToken')) {
       const userDetails = new User();
       const decodeUserDetails = JSON.parse(window.atob(localStorage.getItem('authToken').split('.')[1]));
@@ -34,6 +34,7 @@ export class AuthService {
       userDetails.fullName = decodeUserDetails.fullName;
       userDetails.isLoggedIn = true;
       userDetails.roles = decodeUserDetails.roles.split(",");
+      userDetails.contractorId = decodeUserDetails.contractorId;
       console.log(userDetails);
       this.userData.next(userDetails);
     }

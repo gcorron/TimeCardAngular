@@ -7,15 +7,17 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using TimeCard.Repo.Repos;
+using TimeCardCore.Infrastructure;
 
 namespace TimeCardAngular.Controllers
 {
+    [Authorize("Contractor", "Read")]
     [Route("api/[controller]")]
     [ApiController]
     public class JobController : BaseController
     {
         private readonly JobRepo _JobRepo;
-        public JobController(IConfiguration config, IWebHostEnvironment webHostEnvironment) : base(config, webHostEnvironment)
+        public JobController(IConfiguration config, IWebHostEnvironment webHostEnvironment, IHttpContextAccessor httpContextAccessor) : base(config, webHostEnvironment, httpContextAccessor)
         {
             _JobRepo = new JobRepo(ConnString);
         }

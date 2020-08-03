@@ -21,19 +21,24 @@ namespace TimeCardAngular.Controllers
         private readonly IConfiguration _config;
         private readonly int _curUserId;
         private readonly int _curContractorId;
-        private readonly string _curUserName;
-        
 
-        protected int CurrentUserId { get => _curUserId; }
-        protected string CurrentUsername { get => _curUserName; }
         protected int ContractorId { get => _curContractorId; }
+        protected int UserId { get => _curUserId; }
 
-        public BaseController(IConfiguration config, IWebHostEnvironment webHostEnvironment) : base()
+
+        public BaseController(IConfiguration config, IWebHostEnvironment webHostEnvironment, IHttpContextAccessor httpContextAccessor) : base()
         {
             ConnString = config.GetConnectionString("TimeCard");
             LookupRepo = new LookupRepo(ConnString);
             _webHostEnvironment = webHostEnvironment;
             _config = config;
+
+            var user = httpContextAccessor.HttpContext.User;
+            if (user.Identity.IsAuthenticated)
+            {
+                _curUserId = int.Parse(user.Claims.Where(x => x.Type == "userId").Single().Value);
+                _curContractorId = int.Parse(user.Claims.Where(x => x.Type == "contractorId").Single().Value);
+            }
         }
 
         public string WebRootPath => _webHostEnvironment.WebRootPath;

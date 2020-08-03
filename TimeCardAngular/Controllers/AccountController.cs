@@ -23,7 +23,7 @@ namespace TimeCardAngular.Controllers
     public class AccountController : BaseController
     {
         private readonly AppUserRepo _AppUserRepo;
-        public AccountController(IConfiguration config, IWebHostEnvironment webHostEnvironment) : base(config, webHostEnvironment)
+        public AccountController(IConfiguration config, IWebHostEnvironment webHostEnvironment, IHttpContextAccessor httpContextAccessor) : base(config, webHostEnvironment, httpContextAccessor)
         {
             _AppUserRepo = new AppUserRepo(ConnString);
         }
@@ -96,6 +96,8 @@ namespace TimeCardAngular.Controllers
                             new Claim(JwtRegisteredClaimNames.Sub, login.UserName),
                             new Claim("fullName", login.UserFullName.ToString()),
                             new Claim("roles", login.Roles),
+                            new Claim("contractorId",login.ContractorId.ToString()),
+                            new Claim("userId",login.UserId.ToString()),
                             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
                         };
                         var token = new JwtSecurityToken(

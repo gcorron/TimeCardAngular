@@ -15,7 +15,7 @@ namespace TimeCardAngular.Controllers
     [ApiController]
     public class LookupController : BaseController
     {
-        public LookupController(IConfiguration config, IWebHostEnvironment webHostEnvironment) : base(config, webHostEnvironment)
+        public LookupController(IConfiguration config, IWebHostEnvironment webHostEnvironment, IHttpContextAccessor httpContextAccessor) : base(config, webHostEnvironment, httpContextAccessor)
         {
 
         }
