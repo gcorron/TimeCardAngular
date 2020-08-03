@@ -104,7 +104,7 @@ namespace TimeCardAngular.Controllers
                             issuer: ConfigSetting("Jwt:Issuer"),
                             audience: ConfigSetting("Jwt:Audience"),
                             claims: claims,
-                            expires: DateTime.Now.AddMinutes(30),
+                            expires: DateTime.Now.AddDays(365),
                             signingCredentials: credentials
                         );
                         return Ok(new

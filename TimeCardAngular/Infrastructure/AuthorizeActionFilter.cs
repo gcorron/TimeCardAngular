@@ -29,15 +29,19 @@ namespace TimeCardCore.Infrastructure
             var user = context.HttpContext.User;
             if (user.Identity.IsAuthenticated)
             {
-                isAuthorized = user.Claims.Where(x => x.Value == _item).Any();
+                var roles = user.Claims.Where(x => x.Type == ClaimsIdentity.DefaultRoleClaimType).SingleOrDefault()?.Value;
+                if (roles != null)
+                {
+                    isAuthorized = roles.Split(",").Any(x => x == _item);
+                }
                 if (!isAuthorized)
                 {
-                    context.Result = new UnauthorizedResult();
+                    context.Result = new ForbidResult();
                 }
             }
             else
             {
-                context.Result = new ForbidResult();
+                context.Result = new UnauthorizedResult();
             }
         }
     }

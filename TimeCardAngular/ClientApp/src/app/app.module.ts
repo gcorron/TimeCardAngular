@@ -3,11 +3,8 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
-
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
-import { HomeComponent } from './home/home.component';
-
 import { LoginComponent } from './login/login.component';
 import { AuthGuard } from './guards/auth.guard';
 import { HttpInterceptorService } from './services/http-interceptor.service';
@@ -21,12 +18,12 @@ import { PaymentSummaryComponent } from './payment/paymentSummary.component';
 import { PaymentEditComponent } from './payment/paymentEdit.component';
 import { WorkComponent } from './work/work.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ForbidComponent } from './forbid/forbid.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavMenuComponent,
-    HomeComponent,
     LoginComponent,
     LookupComponent,
     AccountComponent,
@@ -35,6 +32,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     PaymentSummaryComponent,
     PaymentEditComponent,
     WorkComponent,
+    ForbidComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -44,6 +42,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     ReactiveFormsModule,
     RouterModule.forRoot([
       { path: 'login', component: LoginComponent },
+      { path: 'forbid', component: ForbidComponent },
       { path: 'lookup', component: LookupComponent, canActivate: [AdminGuard] },
       { path: 'account', component: AccountComponent, canActivate: [AdminGuard] },
       { path: 'job', component: JobComponent, canActivate: [AdminGuard] },

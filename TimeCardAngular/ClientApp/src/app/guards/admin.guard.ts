@@ -20,10 +20,13 @@ export class AdminGuard implements CanActivate {
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-
-    if (this.userData.roles && this.userData.roles.find((role) => role == UserRole.Admin)) {
-      console.log('admin good');
-      return true;
+    console.log('admin guard', { user: this.userData });
+    if (this.userData.roles) {
+      const roles: string[] = this.userData.roles.split(",");
+      if (roles.find((role) => role == UserRole.Admin)) {
+        console.log('admin good');
+        return true;
+      }
     }
 
     this.router.navigate(['/login'], { queryParams: { returnUrl: state.url } });

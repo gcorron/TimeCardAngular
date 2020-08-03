@@ -1,4 +1,4 @@
 export class SelectListItem {
-  Text: string;
-  Value: string;
+  text: string;
+  value: string;
 }

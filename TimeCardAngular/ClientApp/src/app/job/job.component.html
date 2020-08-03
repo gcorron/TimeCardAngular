@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-2 ml-auto">
-    <button id="btnAddJob" class="btn btn-primary" type="button">Add/Remove</button>
+    <button class="btn btn-primary" type="button" (click)="addRemoveOpen(modal)">Add/Remove</button>
   </div>
 </div>
 <div class="row mt-3" style="max-height:75vh; overflow-y:auto; position:relative;">
@@ -24,13 +24,13 @@
           <td>{{job.descr}}</td>
           <td>
             <span class="span-date" *ngIf="editing == false || editJobId != job.jobId">{{job.startDate | date:'MM/dd/yy' }}</span>
-            <input type="date" class="form-control edit-date" placeholder="- None -" value = "{{job.startDate | date:'yyyy-MM-dd'}}" *ngIf="editing == true && editJobId == job.jobId" />
+            <input type="date" class="form-control edit-date" placeholder="- None -" [ngModel]="editDate | date:'yyyy-MM-dd'" (ngModelChange)="editDate = $event" *ngIf="editing == true && editJobId == job.jobId" />
           </td>
           <td>
             <button type="button" class="btn btn-default fa fa-pencil" title="Adjust Start Date" *ngIf="editing==false || job.jobId != editJobId" (click)="adjustStart(job.jobId)"></button>
             <button type="button" class="btn btn-default fa fa-plus" title="Create New Start Date" *ngIf="editing==false || job.jobId != editJobId" (click)="newStart(job.jobId)"></button>
-            <button type="button" class="btn btn-success btn-sm btn-create" *ngIf="job.jobId == editJobId && editingNew == true">Create New Start Date</button>
-            <button type="button" class="btn btn-primary btn-sm btn-adjust" *ngIf="job.jobId == editJobId && editingAdjust == true">Adjust Start Date</button>
+            <button type="button" class="btn btn-success btn-sm btn-create" *ngIf="job.jobId == editJobId && editingNew == true" (click)="setJobDate()">Create New Start Date</button>
+            <button type="button" class="btn btn-primary btn-sm btn-adjust" *ngIf="job.jobId == editJobId && editingAdjust == true" (click)="setJobDate()">Adjust Start Date</button>
 
           </td>
         </tr>
@@ -38,9 +38,82 @@
     </table>
   </div>
 </div>
-<div id="modalAdd" class="modal fade">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
+
+
+<ng-template #modal let-modal>
+  <div class="modal-content">
+    <div class="modal-header bg-secondary">
+      <h5 class="text-light">Add/Remove Job</h5>
+      <button type="button" title="Close" (click)="modal.dismiss()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div id="saveAlertAddJob" class="alert alert-danger col-md-10 offset-md-1 text-center" style="display:none;">
+          <div asp-validation-summary="All"></div>
+        </div>
+      </div>
+      <ul ngbNav #nav="ngbNav" class="nav-tabs">
+        <li ngbNavItem>
+          <a ngbNavLink>Add</a>
+          <ng-template ngbNavContent>
+            <form novalidate #form="ngForm" autocomplete="off">
+              <div class="form-group form-row mt-3">
+                <label class="col-2 col-form-label">Client</label>
+                <div class="col-8">
+                  <select [(ngModel)]="jobSave.selectedClientId" name="SelectedClientId" class="form-control">
+                    <option *ngFor="let item of jobAdd.clients" [value]="item.val">{{item.text}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group form-row">
+                <label class="col-2 col-form-label">Project</label>
+                <div class="col-8">
+                  <select [(ngModel)]="jobSave.selectedProjectId" name="selectedProjectId" class="form-control">
+                    <option *ngFor="let item of jobAdd.projects" [value]="item.val">{{item.text}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group form-row">
+                <label class="col-2 col-form-label">Bill Type</label>
+                <div class="col-8">
+                  <select [(ngModel)]="jobSave.selectedBillTypeId" name="selectedBillTypeId" class="form-control">
+                    <option *ngFor="let item of jobAdd.billTypes" [value]="item.val">{{item.text}}</option>
+                  </select>
+                </div>
+                <div class="col-1 ml-auto text-right">
+                  <button id="btnSaveJob" class="btn btn-default fa fa-2x fa-check" type="button" title="Save" [disabled]="canSave" (click)="saveJob()"></button>
+                </div>
+              </div>
+            </form>
+          </ng-template>
+        </li>
+        <li ngbNavItem>
+          <a ngbNavLink>Remove</a>
+          <ng-template ngbNavContent>
+            <div class="form-group form-row mt-3">
+              <label class="col-2 col-form-label">Job</label>
+              <div class="col-8">
+                <select [(ngModel)]="selectedJobId" name="selectedJobId" class="form-control">
+                  <option *ngFor="let item of jobAdd.jobs" [value]="item.val">{{item.text}}</option>
+                </select>
+              </div>
+              <div class="col-2 ml-auto text-right">
+                <button id="btnRemoveJob" class="btn btn-primary" type="button" title="Remove" [disabled]="this.selectedJobId != 0" (click)="deleteJob()">Remove</button>
+              </div>
+            </div>
+          </ng-template>
+        </li>
+      </ul>
+      <div [ngbNavOutlet]="nav"></div>
     </div>
   </div>
-</div>
+</ng-template>
+
+
+
+
+
+
+

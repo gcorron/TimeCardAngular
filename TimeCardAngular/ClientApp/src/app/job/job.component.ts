@@ -2,6 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { JobService } from '../services/job.service';
 import { Job } from "../models/job";
 import { User } from "../models/user";
+import { JobStart } from "../models/jobstart";
+import { JobAdd } from "../models/jobadd";
+import { JobSave } from "../models/jobsave";
+import { NgbModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 
 enum EditMode {
   off,
@@ -20,13 +24,21 @@ export class JobComponent implements OnInit {
   jobs: Job[];
   editJobId: number;
   editMode: EditMode;
+  editDate: Date;
+  jobAdd: JobAdd;
+  jobSave: JobSave;
+  selectedJobId: number;
   
-  constructor(private jobService: JobService) {
+  constructor(private jobService: JobService, private modalService: NgbModal) {
     this.editMode = EditMode.off;
     this.get();
   }
 
   ngOnInit() {
+  }
+
+  canSave(): boolean {
+    return !(this.jobSave.selectedBillTypeId == 0 || this.jobSave.selectedClientId == 0 || this.jobSave.selectedProjectId == 0);
   }
 
   get() {
@@ -35,14 +47,48 @@ export class JobComponent implements OnInit {
   }
 
   newStart(jobId: number) {
-    console.log('newstart');
     this.editJobId = jobId;
     this.editMode = EditMode.new;
+    this.setEditDate()
   }
   adjustStart(jobId: number) {
     this.editJobId = jobId;
     this.editMode = EditMode.adjust;
+    this.setEditDate()
   }
+  private setEditDate() {
+    const job = this.jobs.find(j => j.jobId == this.editJobId);
+    this.editDate = job.startDate;
+    console.log('setEditDate', {jobId: this.editJobId})
+  }
+
+  setJobDate() {
+    console.log('setJobDate', { theDate: this.editDate })
+    const job = this.jobs.find(j => j.jobId == this.editJobId);
+    const jobStart = new JobStart();
+    jobStart.jobId = this.editJobId;
+    jobStart.startDate = this.editDate;
+    jobStart.isNew = this.editingNew;
+    console.log('setJobDate', jobStart);
+    this.jobService.setJobDate(jobStart).subscribe(() => {
+      job.startDate = this.editDate
+      this.editJobId = 0;
+      this.editMode = EditMode.off;
+    });
+  }
+
+  saveJob() {
+    this.jobService.saveJob(this.jobSave).subscribe(() => {
+      this.jobService.get().subscribe(() => this.modalService.dismissAll());
+    });
+  }
+
+  deleteJob() {
+    this.jobService.deleteJob(this.selectedJobId).subscribe(() => {
+      this.jobService.get().subscribe(() => this.modalService.dismissAll());
+    });
+  }
+
   get editing(): boolean {
     return this.editMode != EditMode.off;
   }
@@ -51,6 +97,17 @@ export class JobComponent implements OnInit {
   }
   get editingAdjust(): boolean {
     return this.editMode == EditMode.adjust;
+  }
+
+  addRemoveOpen(modal: NgbModal) {
+    this.jobService.prepAddJob()
+      .subscribe((jobAdd) => {
+        this.jobAdd = jobAdd;
+        this.jobSave = new JobSave();
+        this.selectedJobId = 0;
+        const options: NgbModalOptions = { size: 'lg' }
+        this.modalService.open(modal, options);
+      });
   }
 
 }
