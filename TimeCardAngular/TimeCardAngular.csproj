@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
     <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
@@ -19,8 +20,16 @@
 
   <ItemGroup>
     <!-- Don't publish the SPA source files, but do show them in the project files list -->
+    <Compile Remove="TimeCard.Domain\**" />
+    <Compile Remove="TimeCard.Repo\**" />
     <Content Remove="$(SpaRoot)**" />
+    <Content Remove="TimeCard.Domain\**" />
+    <Content Remove="TimeCard.Repo\**" />
+    <EmbeddedResource Remove="TimeCard.Domain\**" />
+    <EmbeddedResource Remove="TimeCard.Repo\**" />
     <None Remove="$(SpaRoot)**" />
+    <None Remove="TimeCard.Domain\**" />
+    <None Remove="TimeCard.Repo\**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
   </ItemGroup>
 
@@ -34,6 +43,8 @@
     <None Remove="ClientApp\src\app\models\jobSave.ts" />
     <None Remove="ClientApp\src\app\models\jobStart.ts" />
     <None Remove="ClientApp\src\app\models\lookup.ts" />
+    <None Remove="ClientApp\src\app\models\payment.ts" />
+    <None Remove="ClientApp\src\app\models\paymentSummary.ts" />
     <None Remove="ClientApp\src\app\models\roles.ts" />
     <None Remove="ClientApp\src\app\models\selectListItem.ts" />
     <None Remove="ClientApp\src\app\models\user.ts" />
@@ -42,7 +53,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="TimeCard.Domain\TimeCard.Domain.csproj" />
     <ProjectReference Include="TimeCard.Repo\TimeCard.Repo.csproj" />
   </ItemGroup>
 
@@ -51,6 +61,8 @@
     <TypeScriptCompile Include="ClientApp\src\app\models\appUser.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\contractor.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\dateRef.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\models\payment.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\models\paymentSummary.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\job.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\jobAdd.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\jobSave.ts" />

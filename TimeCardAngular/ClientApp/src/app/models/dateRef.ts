@@ -34,4 +34,12 @@ export class DateRef {
     const resultNumber = refNumber + (cycle * 14 + 13) * this.dayTicks;
     return new Date(resultNumber);
   }
+
+  static toString(d: Date) {
+    return this.padLeft2(d.getMonth() + 1) + '/' + this.padLeft2(d.getDate()) + '/' + d.getFullYear.toString().slice(-2);
+  }
+
+  private static padLeft2(n: number): string {
+    return ('0' + n).slice(-2);
+  }
 }

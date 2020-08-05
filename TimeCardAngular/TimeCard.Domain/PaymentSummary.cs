@@ -15,6 +15,7 @@ namespace TimeCard.Domain
         public decimal Billed { get; set; }
         public decimal Paid { get; set; }
         public decimal Balance { get => Billed - Paid; }
+        public IEnumerable<Payment> Payments { get; set; }
         public decimal StartDay { get; set; }
         public string StartDate { get => $"{DateRef.GetWorkDate(StartDay):MM/dd/yyyy}"; }
         public decimal PaidThruDay { get; set; }

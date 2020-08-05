@@ -6,6 +6,7 @@ import { JobStart } from "../models/jobstart";
 import { JobAdd } from "../models/jobadd";
 import { JobSave } from "../models/jobsave";
 import { NgbModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
+import { SelectListItem } from '../models/selectListItem';
 
 enum EditMode {
   off,
@@ -27,7 +28,12 @@ export class JobComponent implements OnInit {
   editDate: Date;
   jobAdd: JobAdd;
   jobSave: JobSave;
+
   selectedJobId: number;
+
+  get canSave(): boolean {
+    return !(this.jobSave.selectedBillTypeId == 0 || this.jobSave.selectedClientId == 0 || this.jobSave.selectedProjectId == 0);
+  }
   
   constructor(private jobService: JobService, private modalService: NgbModal) {
     this.editMode = EditMode.off;
@@ -36,11 +42,7 @@ export class JobComponent implements OnInit {
 
   ngOnInit() {
   }
-
-  canSave(): boolean {
-    return !(this.jobSave.selectedBillTypeId == 0 || this.jobSave.selectedClientId == 0 || this.jobSave.selectedProjectId == 0);
-  }
-
+    
   get() {
     this.jobService.get()
       .subscribe(jobs => { this.jobs = jobs });
@@ -78,17 +80,27 @@ export class JobComponent implements OnInit {
   }
 
   saveJob() {
+    this.jobSave.selectedClientId = Number(this.jobSave.selectedClientId);
+    this.jobSave.selectedProjectId = Number(this.jobSave.selectedProjectId);
+    this.jobSave.selectedBillTypeId = Number(this.jobSave.selectedBillTypeId);
     this.jobService.saveJob(this.jobSave).subscribe(() => {
-      this.jobService.get().subscribe(() => this.modalService.dismissAll());
+      this.jobService.get().subscribe(() => this.modalComplete());
     });
   }
 
   deleteJob() {
-    this.jobService.deleteJob(this.selectedJobId).subscribe(() => {
-      this.jobService.get().subscribe(() => this.modalService.dismissAll());
+    this.jobService.deleteJob(Number(this.selectedJobId)).subscribe(() => {
+      this.jobService.get().subscribe(() => this.modalComplete());
     });
   }
 
+  modalComplete() {
+    this.jobService.get()
+      .subscribe(jobs => {
+        this.jobs = jobs;
+        this.modalService.dismissAll();
+      });
+  }
   get editing(): boolean {
     return this.editMode != EditMode.off;
   }
@@ -103,6 +115,7 @@ export class JobComponent implements OnInit {
     this.jobService.prepAddJob()
       .subscribe((jobAdd) => {
         this.jobAdd = jobAdd;
+        console.log(jobAdd);
         this.jobSave = new JobSave();
         this.selectedJobId = 0;
         const options: NgbModalOptions = { size: 'lg' }

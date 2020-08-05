@@ -48,15 +48,14 @@ namespace TimeCardAngular.Controllers
 
         [Route("SaveJob")]
         [HttpPost]
-        public void SaveJob(JobSaveViewModel vm)
+        public void SaveJob(JobSaveViewModel jobSave)
         {
-            ModelState.Clear();
-            _JobRepo.SaveJob(vm.SelectedClientId, vm.SelectedProjectId, vm.SelectedBillTypeId);
+            _JobRepo.SaveJob(jobSave.SelectedClientId, jobSave.SelectedProjectId, jobSave.SelectedBillTypeId);
         }
 
         [Route("DeleteJob")]
         [HttpPost]
-        public void DeleteJob(int jobId)
+        public void DeleteJob([FromBody] int jobId)
         {
             _JobRepo.DeleteJob(jobId);
         }

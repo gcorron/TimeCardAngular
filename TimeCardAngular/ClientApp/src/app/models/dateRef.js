@@ -29,6 +29,12 @@ var DateRef = /** @class */ (function () {
         var resultNumber = refNumber + (cycle * 14 + 13) * this.dayTicks;
         return new Date(resultNumber);
     };
+    DateRef.toString = function (d) {
+        return this.padLeft2(d.getMonth() + 1) + '/' + this.padLeft2(d.getDate()) + '/' + d.getFullYear.toString().slice(-2);
+    };
+    DateRef.padLeft2 = function (n) {
+        return ('0' + n).slice(-2);
+    };
     DateRef.baselineDate = "12/22/2018";
     DateRef.dayTicks = 24 * 60 * 60 * 1000;
     return DateRef;

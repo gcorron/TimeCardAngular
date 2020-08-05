@@ -63,7 +63,7 @@
                 <label class="col-2 col-form-label">Client</label>
                 <div class="col-8">
                   <select [(ngModel)]="jobSave.selectedClientId" name="SelectedClientId" class="form-control">
-                    <option *ngFor="let item of jobAdd.clients" [value]="item.val">{{item.text}}</option>
+                    <option *ngFor="let item of jobAdd.clients" [value]="item.value">{{item.text}}</option>
                   </select>
                 </div>
               </div>
@@ -71,19 +71,19 @@
                 <label class="col-2 col-form-label">Project</label>
                 <div class="col-8">
                   <select [(ngModel)]="jobSave.selectedProjectId" name="selectedProjectId" class="form-control">
-                    <option *ngFor="let item of jobAdd.projects" [value]="item.val">{{item.text}}</option>
+                    <option *ngFor="let item of jobAdd.projects" [value]="item.value">{{item.text}}</option>
                   </select>
                 </div>
               </div>
               <div class="form-group form-row">
                 <label class="col-2 col-form-label">Bill Type</label>
                 <div class="col-8">
-                  <select [(ngModel)]="jobSave.selectedBillTypeId" name="selectedBillTypeId" class="form-control">
-                    <option *ngFor="let item of jobAdd.billTypes" [value]="item.val">{{item.text}}</option>
+                  <select [(ngModel)]="jobSave.selectedBillTypeId" name="selectedBillTypeId " class="form-control">
+                    <option *ngFor="let item of jobAdd.billTypes" [value]="item.value">{{item.text}}</option>
                   </select>
                 </div>
                 <div class="col-1 ml-auto text-right">
-                  <button id="btnSaveJob" class="btn btn-default fa fa-2x fa-check" type="button" title="Save" [disabled]="canSave" (click)="saveJob()"></button>
+                  <button id="btnSaveJob" class="btn btn-default fa fa-2x fa-check" type="button" title="Save" *ngIf="canSave" (click)="saveJob()"></button>
                 </div>
               </div>
             </form>
@@ -96,11 +96,11 @@
               <label class="col-2 col-form-label">Job</label>
               <div class="col-8">
                 <select [(ngModel)]="selectedJobId" name="selectedJobId" class="form-control">
-                  <option *ngFor="let item of jobAdd.jobs" [value]="item.val">{{item.text}}</option>
+                  <option *ngFor="let item of jobAdd.jobs" [value]="item.value">{{item.text}}</option>
                 </select>
               </div>
               <div class="col-2 ml-auto text-right">
-                <button id="btnRemoveJob" class="btn btn-primary" type="button" title="Remove" [disabled]="this.selectedJobId != 0" (click)="deleteJob()">Remove</button>
+                <button id="btnRemoveJob" class="btn btn-primary" type="button" title="Remove" *ngIf="this.selectedJobId != 0" (click)="deleteJob()">Remove</button>
               </div>
             </div>
           </ng-template>

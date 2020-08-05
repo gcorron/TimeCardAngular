@@ -15,23 +15,23 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let item of summary" style="cursor:pointer;">
-          <td>@summary.Client</td>
-          <td>@summary.Project</td>
-          <td>@summary.BillType</td>
-          <td>@summary.Billed</td>
-          <td>@summary.Paid</td>
-          <td>@summary.Balance</td>
-          <td>@summary.StartDate</td>
-          <td>@summary.PaidThruDate</td>
+        <tr *ngFor="let item of paymentSummary" style="cursor:pointer;">
+          <td>{{item.client}}</td>
+          <td>{{item.project}}</td>
+          <td>{{item.billType}}</td>
+          <td>{{item.billed}}</td>
+          <td>{{item.paid}}</td>
+          <td>{{item.balance}}</td>
+          <td>{{item.startDate}}</td>
+          <td>{{item.paidThruDate}}</td>
           <td>
-            <div *ngIf="getPayments(item.jobId).length > 0">
-              <button type="button" class="btn btn-link" (click)="toggleDetailCollapse(item.jobId)">{{payments.length}}</button>
-              <div [ngbCollapse]="isDetailCollapsed(item.jobId)">
-                <div *ngFor="let pmt of payments" class="row">
-                  <div class="col-md-4 text-right">@pmt.Hours</div>
-                  <div class="col-md-4">@pmt.PayDate:MM/dd/yy</div>
-                  <div class="col-md-4">@pmt.CheckNo</div>
+            <div *ngIf="item.payments.length > 0">
+              <button type="button" class="btn btn-link" (click)="item.seePayments != item.seePayments">{{payments.length}}</button>
+              <div [ngbCollapse]="!item.seePayments">
+                <div *ngFor="let pmt of item.payments" class="row">
+                  <div class="col-md-4 text-right">{{pmt.hours}}</div>
+                  <div class="col-md-4">{{pmt.payDate}}</div>
+                  <div class="col-md-4">{{pmt.checkNo}}</div>
                 </div>
               </div>
             </div>
@@ -41,9 +41,9 @@
           <td></td>
           <td></td>
           <td><strong>Total</strong></td>
-          <td><strong>@Model.PaymentSummary.Sum(x => x.Billed)</strong></td>
-          <td><strong>@Model.PaymentSummary.Sum(x => x.Paid)</strong></td>
-          <td><strong>@Model.PaymentSummary.Sum(x => x.Balance)</strong></td>
+          <td><strong>{{totalBilled}}</strong></td>
+          <td><strong>{{totalPaid}}</strong></td>
+          <td><strong>{{totalBalance}}</strong></td>
           <td></td>
           <td></td>
           <td></td>
