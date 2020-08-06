@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PaymentService } from "../services/payment.service";
 import { PaymentSummary } from '../models/paymentSummary';
+import { BridgeService } from "../services/bridge.service";
 
 @Component({
   selector: 'payment-summary',
@@ -8,7 +9,7 @@ import { PaymentSummary } from '../models/paymentSummary';
 })
 export class PaymentSummaryComponent implements OnInit {
 
-  constructor(private paymentService: PaymentService) {
+  constructor(private paymentService: PaymentService, private bridgeService: BridgeService) {
     this.paymentService.summary().subscribe(summary => {
       this.paymentSummary = summary;
       this.totalBilled = this.paymentSummary.map(el => el.billed).reduce((accumulator, value) => accumulator + value);
@@ -26,4 +27,12 @@ export class PaymentSummaryComponent implements OnInit {
   ngOnInit() {
   }
 
+  selectPaymentJob(jobId: number) {
+    this.bridgeService.selectedPaymentJob = jobId;
+    const summary = this.paymentSummary.find(s => s.jobId == jobId);
+    this.bridgeService.selectedClient = summary.client;
+    this.bridgeService.selectedProject = summary.project;
+    this.bridgeService.selectedBillType = summary.billType;
+    this.bridgeService.selectedPaymentTab = 1;
+  }
 }

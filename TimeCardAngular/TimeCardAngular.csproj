@@ -50,6 +50,7 @@
     <None Remove="ClientApp\src\app\models\user.ts" />
     <None Remove="ClientApp\src\app\payment\paymentEdit.component.ts" />
     <None Remove="ClientApp\src\app\payment\paymentSummary.component.ts" />
+    <None Remove="ClientApp\src\app\pipes\workDate.ts" />
   </ItemGroup>
 
   <ItemGroup>
@@ -73,6 +74,7 @@
     <TypeScriptCompile Include="ClientApp\src\app\models\user.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\payment\paymentEdit.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\payment\paymentSummary.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\pipes\workDate.ts" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

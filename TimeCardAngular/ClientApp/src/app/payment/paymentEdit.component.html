@@ -1,35 +1,35 @@
-
 <form id="formPayment" autocomplete="off">
   <div *ngIf="selectedJobId != 0" class="card mt-3">
     <div class="card-header">
       <div class="form-group row">
-        <div class="col-md-2">@(Model.SelectedJob?.Client)</div>
-        <div class="col-md-2">@(Model.SelectedJob?.Project)</div>
-        <div class="col-md-2">@(Model.SelectedJob?.BillTypeDescr)</div>
+        <div class="col-md-2">{{selectedClient}}</div>
+        <div class="col-md-2">{{selectedProject}}</div>
+        <div class="col-md-2">{{selectedBillType}}</div>
+        <div class="col-md-2">{{editPayment.payDate | date}}</div>
       </div>
     </div>
-    <div class="card-body" id="divEdit" [ngClass]="editPayment.payId == 0 ? 'bg-success': 'bg-info'" *ngIf="canEdit">
+    <div class="card-body" id="divEdit" [ngClass]="editPayment.payId == 0 ? 'bg-success': 'bg-info'">
       <div class="form-group form-row">
         <div class="col-md-1 col-form-label text-right">Date</div>
         <div class="col-md-2">
-          <input asp-for="EditPayment.PayDate" class="form-control" type="date" />
+          <input [ngModel]="editPayment.payDate | date:'yyyy-MM-dd'" (ngModelChange)="editPayment.payDate = parseDate($event)" name="payDate" class="form-control" type="date" />
         </div>
         <div class="col-md-1 col-form-label text-right">Amount</div>
 
-        <div class="col-md-2"><input [(ngModel)]="editPayment.hours" type = "number" min = "0" max = "400" step = "0.25" class="form-control"/></div>
+        <div class="col-md-2"><input [(ngModel)]="editPayment.hours" name="payHours" type = "number" min = "0" max = "400" step = "0.25" class="form-control"/></div>
         <div class="col-md-1 col-form-label text-right">Check #</div>
-        <div class="col-md-2"><input [(ngModel)]="editPayment.checkNo" class = "form-control" type = "number" maxlength = "5" /></div>
+        <div class="col-md-2"><input [(ngModel)]="editPayment.checkNo" name="payCheckNo" class = "form-control" type = "number" maxlength = "5" /></div>
         <div class="col-md-3 text-right">
-          <button class="btn btn-default fa fa-2x fa-plus edit-button" type="button" id="btnAdd" title="Add" style="display:none;"></button>
-          <button class="btn btn-default fa fa-2x fa-times edit-button cancel" style="display:none;" value="Delete" title="Delete" type="button"></button>
-          <button class="btn btn-default fa fa-2x fa-check" value="Save" title="Save" type="button"></button>
+          <button class="btn btn-default fa fa-2x fa-plus edit-button" type="button" title="Add" (click)="addPayment()"></button>
+          <button class="btn btn-default fa fa-2x fa-times edit-button cancel" *ngIf="editPayment.payId!=0" title="Delete" type="button" (click)="deletePayment()"></button>
+          <button class="btn btn-default fa fa-2x fa-check" value="Save" title="Save" type="button" (click)="savePayment()" *ngIf="canSave"></button>
         </div>
       </div>
-      <div *ngIf="timeCardsUnpaid != null" class="form-group form-row">
+      <div *ngIf="unpaid != null" class="form-group form-row">
         <div class="col-md-2 offset-5 col-form-label text-right">Work Period</div>
         <div class="col-md-2">
-          <select [(ngModel)]="editPayment.workDay" class="form-control">
-            <option *ngFor="let unpaid of timecardsUnpaid" value="{{unpaid.id}}">{{unpaid.amount}}</option>
+          <select [(ngModel)]="editPayment.workDay" name="workDay" class="form-control">
+            <option *ngFor="let item of unpaid" value="{{item.value}}">{{item.text}}</option>
           </select>
         </div>
       </div>
@@ -43,15 +43,15 @@
             <th style="width:15%;">Date</th>
             <th class="text-right" style="width:15%;">Hours</th>
             <th style="width:15%;">Check No.</th>
-            <th>{{jobIsTimeCard ? "Work Period" : ""}}</th>
+            <th>{{isTimeCard ? "Work Period" : ""}}</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let payment of payments" class="payment-row">
-            <td style="width:15%;">{{payment.PayDate}}</td>
-            <td style="width:15%;" class="text-right">{{payment.Hours}}</td>
-            <td style="width:15%;">{{payment.CheckNo}}</td>
-            <td>{{WorkDate(Model.JobIsTimeCard ? payment.WorkDay : 0)}}</td>
+          <tr *ngFor="let payment of payments" class="payment-row" style="cursor:pointer;" (click)="setEditPayment(payment.payId)">
+            <td style="width:15%;">{{payment.payDate | date: "MM/dd/yy"}}</td>
+            <td style="width:15%;" class="text-right">{{payment.hours | number: "1.2-2"}}</td>
+            <td style="width:15%;">{{payment.checkNo}}</td>
+            <td>{{payment.workDay | workDate | date: "MM/dd/yy"}}</td>
           </tr>
         </tbody>
       </table>

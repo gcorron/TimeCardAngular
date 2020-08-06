@@ -19,6 +19,7 @@ import { PaymentEditComponent } from './payment/paymentEdit.component';
 import { WorkComponent } from './work/work.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ForbidComponent } from './forbid/forbid.component';
+import { WorkDatePipe } from './pipes/workDate';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { ForbidComponent } from './forbid/forbid.component';
     PaymentEditComponent,
     WorkComponent,
     ForbidComponent,
+    WorkDatePipe,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

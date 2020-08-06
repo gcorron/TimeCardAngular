@@ -1,6 +1,11 @@
 import { DateRef } from "./dateRef"
 import { Payment } from "./payment"
 export class PaymentSummary {
+
+  constructor() {
+    this.seePayments = false;
+  }
+
   jobId: number;
   client: string;
   project: string;
@@ -21,4 +26,5 @@ export class PaymentSummary {
     return DateRef.toString(DateRef.getWorkDate(this.paidThruDay));
   }
   seePayments: boolean;
+
 }

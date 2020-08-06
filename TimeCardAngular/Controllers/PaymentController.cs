@@ -34,7 +34,7 @@ namespace TimeCardAngular.Controllers
 
         [Route("Summary")]
         [HttpGet]
-        public ActionResult Get()
+        public ActionResult GetSummary()
         {
             var summary = _PaymentRepo.GetSummary(ContractorId, DateRef.CurrentWorkCycle);
             var payments = _PaymentRepo.GetPayments(ContractorId);
@@ -44,5 +44,39 @@ namespace TimeCardAngular.Controllers
             }
             return Ok(summary);
         }
+
+        [Route("Payments")]
+        [HttpGet]
+        public ActionResult GetPayments(int jobId)
+        {
+            return Ok(_PaymentRepo.GetPaymentsForJob(ContractorId,jobId));
+        }
+        
+        [Route("Unpaid")]
+        [HttpGet]
+        public ActionResult GetUnpaid(int jobId)
+        {
+            return Ok(_PaymentRepo.GetJobTimeCardUnpaidCycles(ContractorId, jobId)
+                .Select(x => new SelectListItem { Text = x.ToString(), Value = x.WorkDay.ToString() }));
+        }
+
+        [Route("Save")]
+        [HttpPost]
+        public void Save(Payment payment)
+        {
+            if (payment.PayId ==0 )
+            {
+                payment.ContractorId = ContractorId;
+            }
+            _PaymentRepo.SavePayment(payment);
+        }
+
+        [Route("Delete")]
+        [HttpPost]
+        public void Delete([FromBody] int payId)
+        {
+            _PaymentRepo.DeletePayment(payId);
+        }
+
     }
 }

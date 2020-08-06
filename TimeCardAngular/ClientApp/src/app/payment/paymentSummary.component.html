@@ -15,22 +15,22 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let item of paymentSummary" style="cursor:pointer;">
+        <tr *ngFor="let item of paymentSummary" style="cursor:pointer;" (click)="selectPaymentJob(item.jobId)">
           <td>{{item.client}}</td>
           <td>{{item.project}}</td>
           <td>{{item.billType}}</td>
-          <td>{{item.billed}}</td>
-          <td>{{item.paid}}</td>
-          <td>{{item.balance}}</td>
+          <td>{{item.billed | number:'1.2-2'}}</td>
+          <td>{{item.paid | number:'1.2-2'}}</td>
+          <td>{{item.balance | number:'1.2-2'}}</td>
           <td>{{item.startDate}}</td>
           <td>{{item.paidThruDate}}</td>
           <td>
             <div *ngIf="item.payments.length > 0">
-              <button type="button" class="btn btn-link" (click)="item.seePayments != item.seePayments">{{payments.length}}</button>
+              <button type="button" class="btn btn-link" (click)="item.seePayments = !item.seePayments">{{item.payments.length}}</button>
               <div [ngbCollapse]="!item.seePayments">
                 <div *ngFor="let pmt of item.payments" class="row">
-                  <div class="col-md-4 text-right">{{pmt.hours}}</div>
-                  <div class="col-md-4">{{pmt.payDate}}</div>
+                  <div class="col-md-4 text-right">{{pmt.hours | number:'1.2-2'}}</div>
+                  <div class="col-md-4">{{pmt.payDate | date:'MM/dd/yy'}}</div>
                   <div class="col-md-4">{{pmt.checkNo}}</div>
                 </div>
               </div>
@@ -41,9 +41,9 @@
           <td></td>
           <td></td>
           <td><strong>Total</strong></td>
-          <td><strong>{{totalBilled}}</strong></td>
-          <td><strong>{{totalPaid}}</strong></td>
-          <td><strong>{{totalBalance}}</strong></td>
+          <td><strong>{{totalBilled | number:'1.2-2'}}</strong></td>
+          <td><strong>{{totalPaid | number:'1.2-2'}}</strong></td>
+          <td><strong>{{totalBalance | number:'1.2-2'}}</strong></td>
           <td></td>
           <td></td>
           <td></td>

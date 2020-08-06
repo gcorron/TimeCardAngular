@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var dateRef_1 = require("./dateRef");
 var PaymentSummary = /** @class */ (function () {
     function PaymentSummary() {
+        this.seePayments = false;
     }
     Object.defineProperty(PaymentSummary.prototype, "startDate", {
         get: function () {
