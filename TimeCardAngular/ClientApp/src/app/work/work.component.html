@@ -1,1 +1,29 @@
-<p>work works!</p>
+<ul ngbNav [(activeId)]="activeTab" #nav="ngbNav" class="nav-tabs">
+  <li [ngbNavItem]="0">
+    <a ngbNavLink>Edit</a>
+    <ng-template ngbNavContent>
+      <select [(ngModel)]="selectedCycle" name="selectedCycle" class="form-control">
+        <option *ngFor="let item of cycles" value="{{item.value}}">{{item.text}}</option>
+      </select>
+    </ng-template>
+  </li>
+  <li [ngbNavItem]="1">
+    <a ngbNavLink>Summary by Period</a>
+    <ng-template ngbNavContent>Summary by Period works!</ng-template>
+  </li>
+  <li [ngbNavItem]="2">
+    <a ngbNavLink>Summary by Job</a>
+    <ng-template ngbNavContent>Summary by Job works!</ng-template>
+  </li>
+  <li [ngbNavItem]="3">
+    <a ngbNavLink>Detail by Job</a>
+    <ng-template ngbNavContent>
+      <select [(ngModel)]="selectedJob" name="selectedJob" class="form-control">
+        <option *ngFor="let item of jobs" value="{{item.value}}">{{item.text}}</option>
+      </select>
+    </ng-template>
+  </li>
+
+</ul>
+
+<div [ngbNavOutlet]="nav"></div>
