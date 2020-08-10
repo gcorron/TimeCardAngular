@@ -15,6 +15,7 @@ using ngWithJwt.Models;
 using TimeCard.Domain;
 using TimeCard.Repo.Repos;
 using TimeCardAngular.Models;
+using TimeCardCore.Infrastructure;
 
 namespace TimeCardAngular.Controllers
 {
@@ -36,6 +37,7 @@ namespace TimeCardAngular.Controllers
             return Ok(_AppUserRepo.GetUserRoles(0).OrderBy(x => x.Descr));
         }
 
+        [Authorize("Admin", "Read")]
         [Route("Get")]
         [HttpGet]
         public IActionResult Get()
@@ -48,6 +50,7 @@ namespace TimeCardAngular.Controllers
             return Ok(appUsers);
         }
 
+        [Authorize("Admin", "Write")]
         [Route("Save")]
         [HttpPost]
         public void Save(AppUser appUser)
@@ -61,6 +64,7 @@ namespace TimeCardAngular.Controllers
 
         }
 
+        [Authorize("Admin", "Write")]
         [Route("Delete")]
         public void Delete(AppUser appUser)
         {
@@ -111,10 +115,10 @@ namespace TimeCardAngular.Controllers
                 return BadRequest("Invalid client request");
             }
             var refreshToken = UpdateRefreshToken(username);
-            login.UserName = username;
             return LoginOk(login);
         }
 
+        [Authorize("Admin", "Read")]
         [Route("GetContractor")]
         [HttpGet]
         public IActionResult GetContractor(int userId)
@@ -127,6 +131,7 @@ namespace TimeCardAngular.Controllers
             return Ok(contractor);
         }
 
+        [Authorize("Admin", "Write")]
         [Route("SaveContractor")]
         [HttpPost]
         public IActionResult SaveContractor(Contractor contractor)
@@ -191,7 +196,7 @@ namespace TimeCardAngular.Controllers
                 issuer: ConfigSetting("Jwt:Issuer"),
                 audience: ConfigSetting("Jwt:Audience"),
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(1),
+                expires: DateTime.Now.AddMinutes(15),
                 signingCredentials: credentials
             );
 

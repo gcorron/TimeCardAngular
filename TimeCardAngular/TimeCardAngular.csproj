@@ -49,6 +49,8 @@
     <None Remove="ClientApp\src\app\models\selectListItem.ts" />
     <None Remove="ClientApp\src\app\models\tokenApiModel.ts" />
     <None Remove="ClientApp\src\app\models\user.ts" />
+    <None Remove="ClientApp\src\app\models\work.ts" />
+    <None Remove="ClientApp\src\app\models\workSummary.ts" />
     <None Remove="ClientApp\src\app\payment\paymentEdit.component.ts" />
     <None Remove="ClientApp\src\app\payment\paymentSummary.component.ts" />
     <None Remove="ClientApp\src\app\pipes\workDate.ts" />
@@ -63,6 +65,7 @@
     <TypeScriptCompile Include="ClientApp\src\app\models\appUser.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\contractor.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\dateRef.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\models\work.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\tokenApiModel.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\payment.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\paymentSummary.ts" />
@@ -74,6 +77,7 @@
     <TypeScriptCompile Include="ClientApp\src\app\models\selectListItem.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\roles.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\user.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\models\workSummary.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\payment\paymentEdit.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\payment\paymentSummary.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\pipes\workDate.ts" />

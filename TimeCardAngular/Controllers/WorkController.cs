@@ -6,13 +6,15 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
 using TimeCard.Domain;
 using TimeCard.Repo.Repos;
+using TimeCardAngular.Models;
+using TimeCardCore.Infrastructure;
 
 namespace TimeCardAngular.Controllers
 {
+    [Authorize("Contractor", "Write")]
     [Route("api/[controller]")]
     [ApiController]
     public class WorkController : BaseController
@@ -30,7 +32,8 @@ namespace TimeCardAngular.Controllers
         [HttpGet]
         public IActionResult Jobs(int cycle)
         {
-            return Ok(_JobRepo.GetJobsForWork(ContractorId, cycle).Select(x => new SelectListItem { Text = x.Descr, Value = x.Id.ToString() }));
+            var jobs = _JobRepo.GetJobsForWork(ContractorId, cycle).Select(x => new SelectListItem { Text = x.Descr, Value = x.Id.ToString() });
+            return Ok(jobs);
         }
 
         [Route("Cycles")]
@@ -39,6 +42,31 @@ namespace TimeCardAngular.Controllers
         {
             return Ok(GetPayCycles());
         }
+
+        [Route("Summary")]
+        [HttpGet]
+        public ActionResult WorkSummary()
+        {
+            var summary = _WorkRepo.GetWorkSummary(ContractorId);
+            return Ok(summary);
+        }
+
+        [Route("SummaryJob")]
+        [HttpGet]
+        public ActionResult WorkSummaryJob()
+        {
+            var summary = _WorkRepo.GetWorkSummary(ContractorId);
+            return Ok(summary);
+        }
+
+        [Route("DetailJob")]
+        [HttpGet]
+        public ActionResult WorkDetailJob(int jobId)
+        {
+            var detail = _WorkRepo.GetWorkJobDetail(ContractorId, jobId);
+            return Ok(detail);
+        }
+
 
         private IEnumerable<SelectListItem> GetPayCycles()
         {

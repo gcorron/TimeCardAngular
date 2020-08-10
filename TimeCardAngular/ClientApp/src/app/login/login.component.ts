@@ -57,7 +57,8 @@ export class LoginComponent implements OnInit {
         },
         (error) => {
           this.loading = false;
-          console.log(error);
+          console.log('Login error', { error: error });
+          this.message = 'Server error';
           this.loginForm.reset();
           this.loginForm.setErrors({
             invalidLogin: true

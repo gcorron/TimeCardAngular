@@ -25,7 +25,7 @@ export class AccountComponent implements OnInit {
 
   constructor(private appUserService: AppUserService, private modalService: NgbModal) {
     this.editAppUser = new AppUser();
-    this.appUserService.roles().subscribe(roles => { this.roles = roles; console.log(roles); });
+    this.appUserService.roles().subscribe(roles => this.roles = roles);
     this.get();
   }
 
@@ -35,13 +35,12 @@ export class AccountComponent implements OnInit {
   get() {
 
     this.appUserService.get()
-      .subscribe(users => { this.users = users; console.log(users); });
+      .subscribe(users => this.users = users);
   }
 
   select(userId: number) {
     Object.assign(this.editAppUser, this.users.find(u => u.userId == userId));
     this.roles.forEach(lu => lu.active = this.editAppUser.roles.find(l2 => l2.id == lu.id).active);
-    console.log(this.editAppUser);
   }
 
   save(form: NgForm) {
@@ -90,7 +89,6 @@ export class AccountComponent implements OnInit {
     this.contractorSubmitted = false;
     this.appUserService.getContractor(userId)
       .subscribe((contractor) => {
-        console.log(contractor);
         this.contractor = contractor;
         this.modalService.open(modal);
       });

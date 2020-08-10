@@ -8,9 +8,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using TimeCard.Domain;
 using TimeCardAngular.Models;
+using TimeCardCore.Infrastructure;
 
 namespace TimeCardAngular.Controllers
 {
+    [Authorize("Admin", "Read")]
     [Route("api/[controller]")]
     [ApiController]
     public class LookupController : BaseController

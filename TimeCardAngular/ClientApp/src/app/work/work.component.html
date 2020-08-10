@@ -18,9 +18,50 @@
   <li [ngbNavItem]="3">
     <a ngbNavLink>Detail by Job</a>
     <ng-template ngbNavContent>
-      <select [(ngModel)]="selectedJob" name="selectedJob" class="form-control">
-        <option *ngFor="let item of jobs" value="{{item.value}}">{{item.text}}</option>
-      </select>
+      <div class="row mt-4">
+        <label class="col-form-label col-2">Job {{selectedJob}}</label>
+        <div class="col-3">
+          <select [(ngModel)]="selectedJob" name="selectedJob" class="form-control">
+            <option *ngFor="let item of jobs" [ngValue]="item.value" selected="{{item.value == selectedJob}}">{{item.text}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="row mt-4">
+        <div style="flex-grow:1;overflow-y:auto; overflow-x:hidden; position:relative;">
+          <div class="row">
+            <div class="col-md-12">
+              <table class="table table-sm table-striped table-bordered table-hover">
+                <thead class="sticky">
+                  <tr>
+                    <th class="work-col-1">Date</th>
+                    <th class="work-col-1 text-right">Hours</th>
+                    <th class="work-col-1">Type</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let entry of jobDetail" class="work-row">
+                    <td class="work-col-1">{{entry.workDate}}</td>
+                    <td class="work-col-1 text-right">{{entry.hours | number: "1.2-2"}}</td>
+                    <td class="work-col-1">{{entry.workTypeDescr}}</td>
+                    <td>{{entry.descr}}</td>
+                  </tr>
+                  <tr class="work-row">
+                    <td></td>
+                    <td class="work-col-1 text-right">{{jobDetailTotal | number: "1.2-2"}}</td>
+                    <td class="work-col-1">Total</td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
     </ng-template>
   </li>
 

@@ -23,11 +23,11 @@
     </div>
 
     <div class="form-group form-row">
-      <div class="col-md-3 offset-2">
-        <div class="custom-control form-control custom-checkbox bg-transparent border-0" >
-          <input for="rememberMe" formControlName="rememberMe" class="custom-control-input" type="checkbox"/>
-          <label for="rememberMe" class="custom-control-label">Remember Me</label>
-        </div>
+      <div class="col-md-3 offset-2 mt-1 form-check">
+        <label class="form-check-label ml-4">
+          <input type="checkbox" formControlName="rememberMe" class="form-check-input" />
+          Remember Me
+        </label>
       </div>
       <div class="col-1">
         <button [disabled]="loading" class="btn btn-primary">

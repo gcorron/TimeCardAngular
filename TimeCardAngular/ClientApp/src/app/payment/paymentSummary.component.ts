@@ -15,7 +15,6 @@ export class PaymentSummaryComponent implements OnInit {
       this.totalBilled = this.paymentSummary.map(el => el.billed).reduce((accumulator, value) => accumulator + value);
       this.totalPaid = this.paymentSummary.map(el => el.paid).reduce((accumulator, value) => accumulator + value);
       this.totalBalance = this.paymentSummary.map(el => el.balance).reduce((accumulator, value) => accumulator + value);
-      console.log(summary);
     });
   }
 
