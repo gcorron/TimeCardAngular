@@ -5,6 +5,4 @@ export class User {
   roles: string;
   contractorId: number;
   refreshToken: string;
-
-  //test
 }   

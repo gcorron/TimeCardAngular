@@ -4,7 +4,7 @@ import { PaymentService } from "../services/payment.service";
 import { BridgeService } from '../services/bridge.service';
 import { SelectListItem } from "../models/SelectListItem";
 import { DateRef } from "../models/dateRef";
-import { combineLatest, Observable } from 'rxjs';
+import { combineLatest } from 'rxjs';
 
 @Component({
   selector: 'payment-edit',
@@ -37,10 +37,10 @@ export class PaymentEditComponent implements OnInit {
     const payments$ = this.paymentService.payments(this.bridgeService.selectedPaymentJob);
     if (this.selectedBillType == 'TC') {
       const unpaid$ = this.paymentService.unpaid(this.bridgeService.selectedPaymentJob);
-      combineLatest<Observable<SelectListItem>, Observable<SelectListItem>>(payments$, unpaid$)
+      combineLatest(payments$, unpaid$, (payments, unpaid) => ({ payments, unpaid }))
         .subscribe(pair => {
-          this.payments = pair[0];
-          this.unpaid = pair[1];
+          this.payments = pair.payments;
+          this.unpaid = pair.unpaid;
         })
     }
     else {

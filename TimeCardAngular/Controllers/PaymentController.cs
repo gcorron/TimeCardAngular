@@ -60,7 +60,7 @@ namespace TimeCardAngular.Controllers
                 .Select(x => new SelectListItem { Text = x.ToString(), Value = x.WorkDay.ToString() }));
         }
 
-        [Route("Payment")]
+        [Route("Save")]
         [HttpPost]
         public void Save(Payment payment)
         {
@@ -71,9 +71,9 @@ namespace TimeCardAngular.Controllers
             _PaymentRepo.SavePayment(payment);
         }
 
-        [Route("Payment")]
-        [HttpDelete]
-        public void Delete(int payId)
+        [Route("Delete")]
+        [HttpPost]
+        public void Delete([FromBody] int payId)
         {
             _PaymentRepo.DeletePayment(payId);
         }

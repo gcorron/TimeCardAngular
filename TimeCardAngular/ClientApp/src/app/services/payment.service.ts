@@ -25,10 +25,10 @@ export class PaymentService {
   }
 
   save(payment: Payment): Observable<void> {
-    return this.http.post<void>('api/Payment/Payment', payment);
+    return this.http.post<void>('api/Payment/Save', payment);
   }
 
   delete(payId: number): Observable<void> {
-    return this.http.delete<void>('api/Payment/Payment', { params: new HttpParams().set("payId", payId.toString()) });
+    return this.http.post<void>('api/Payment/Delete', payId);
   }
 }

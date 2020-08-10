@@ -57,15 +57,5 @@ namespace TimeCard.Repo.Repos
             ExecuteSp("uContractor", contractor);
         }
 
-        public void SaveRefreshToken(AppUserRefreshToken refreshToken)
-        {
-            ExecuteSp("uAppUserRefreshToken", refreshToken);
-        }
-
-        public Login LoginRefresh(AppUserRefreshToken refreshToken)
-        {
-            return QuerySingleSp<Login>("sLoginRefresh", refreshToken);
-        }
-
     }
 }
