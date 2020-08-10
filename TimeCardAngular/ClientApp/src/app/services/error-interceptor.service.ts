@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
-import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
+import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, first } from 'rxjs/operators';
 import { Router } from "@angular/router";
 
 @Injectable({
@@ -14,9 +14,25 @@ export class ErrorInterceptorService implements HttpInterceptor {
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(request).pipe(catchError(err => {
-      console.log("Error Intercepted", { err: err });
       if (err.status === 401) {
-        this.authService.logout();
+        //try refresh
+        this.authService.refreshLogin()
+          .pipe(first())
+          .subscribe(
+            (response) => {
+              if (response.login) {
+                return next.handle(request).pipe(catchError(err => {
+                  return throwError(err.status);
+                }));
+              }
+              else {
+                this.authService.logout();
+              }
+            },
+            (error) => {
+              this.authService.logout();
+            }
+        );
       }
       if (err.status === 403) {
         this.authService.forbid();

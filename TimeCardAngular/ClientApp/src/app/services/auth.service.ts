@@ -4,6 +4,8 @@ import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { User } from '../models/user';
+import { TokenApiModel } from '../models/tokenApiModel';
+
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +21,24 @@ export class AuthService {
       .pipe(map(response => {
         if (response.token) {
           localStorage.setItem('authToken', response.token);
+          localStorage.setItem('refreshToken', response.refreshToken);
+        }
+        this.setUserDetails();
+        return response;
+      }));
+  }
+
+  refreshLogin() {
+    const tokenApiModel = new TokenApiModel();
+    tokenApiModel.authToken = localStorage.getItem('authToken');
+    tokenApiModel.refreshToken = localStorage.getItem('refreshToken');
+    console.log('refreshLogin', { m: tokenApiModel });
+
+    return this.http.post<any>('/api/Account/Refresh', tokenApiModel)
+      .pipe(map(response => {
+        if (response.token) {
+          localStorage.setItem('authToken', response.token);
+          localStorage.setItem('refreshToken', response.refreshToken);
         }
         this.setUserDetails();
         return response;

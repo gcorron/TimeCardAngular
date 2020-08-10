@@ -4,4 +4,5 @@ export class User {
   isLoggedIn: boolean;
   roles: string;
   contractorId: number;
+  refreshToken: string;
 }   

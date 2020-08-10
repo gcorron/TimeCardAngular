@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
@@ -86,33 +87,8 @@ namespace TimeCardAngular.Controllers
                         message = "Please change your password.";
                         break;
                     case "OK":
-                        var roles = _AppUserRepo.GetUserRoles(login.UserId).Where(x => x.Active).Select(x => x.Descr);
-                        login.Roles = String.Join(",", roles);
                         login.UserName = vm.UserName;
-                        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(ConfigSetting("Jwt:SecretKey")));
-                        var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-                        var claims = new[]
-                        {
-                            new Claim(JwtRegisteredClaimNames.Sub, login.UserName),
-                            new Claim("fullName", login.UserFullName.ToString()),
-                            new Claim("roles", login.Roles),
-                            new Claim("contractorId",login.ContractorId.ToString()),
-                            new Claim("userId",login.UserId.ToString()),
-                            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-                        };
-                        var token = new JwtSecurityToken(
-                            issuer: ConfigSetting("Jwt:Issuer"),
-                            audience: ConfigSetting("Jwt:Audience"),
-                            claims: claims,
-                            expires: DateTime.Now.AddDays(365),
-                            signingCredentials: credentials
-                        );
-                        return Ok(new
-                        {
-                            token = new JwtSecurityTokenHandler().WriteToken(token),
-                            login
-                        });
-
+                        return LoginOk(login);
                     case "NO":
                         message = "User Name or Password is invalid.";
                         break;
@@ -122,6 +98,21 @@ namespace TimeCardAngular.Controllers
                 }
             }
             return Ok(message);
+        }
+
+        [HttpPost]
+        [Route("Refresh")]
+        public IActionResult Refresh(TokenApiModel tokenApiModel)
+        {
+            var username = GetUserNameFromExpiredToken(tokenApiModel.AuthToken);
+            var login = _AppUserRepo.LoginRefresh(new AppUserRefreshToken { UserName = username, RefreshToken = tokenApiModel.RefreshToken, RefreshTokenExpired = DateTime.Now });
+            if (login.Result != "OK")
+            {
+                return BadRequest("Invalid client request");
+            }
+            var refreshToken = UpdateRefreshToken(username);
+            login.UserName = username;
+            return LoginOk(login);
         }
 
         [Route("GetContractor")]
@@ -144,5 +135,76 @@ namespace TimeCardAngular.Controllers
             return Ok(true);
         }
 
+        private string GetUserNameFromExpiredToken(string token)
+        {
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(ConfigSetting("Jwt:SecretKey")));
+
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateAudience = false,
+                ValidateIssuer = false,
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = securityKey,
+                ValidateLifetime = false
+            };
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            SecurityToken securityToken;
+            tokenHandler.ValidateToken(token, tokenValidationParameters, out securityToken);
+            var jwtSecurityToken = securityToken as JwtSecurityToken;
+            if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+                throw new SecurityTokenException("Invalid token");
+            return jwtSecurityToken.Subject;
+        }
+
+        private AppUserRefreshToken UpdateRefreshToken(string username)
+        {
+            string refreshToken;
+            var randomNumber = new byte[32];
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(randomNumber);
+                refreshToken =  Convert.ToBase64String(randomNumber);
+
+            }
+            var appUserRefreshToken = new AppUserRefreshToken { RefreshToken = refreshToken, UserName = username, RefreshTokenExpired = DateTime.Now.AddDays(7) };
+            _AppUserRepo.SaveRefreshToken(appUserRefreshToken);
+            return appUserRefreshToken;
+        }
+
+        private IActionResult LoginOk(Login login)
+        {
+            var roles = _AppUserRepo.GetUserRoles(login.UserId).Where(x => x.Active).Select(x => x.Descr);
+            login.Roles = String.Join(",", roles);
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(ConfigSetting("Jwt:SecretKey")));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+            var claims = new[]
+            {
+                            new Claim(JwtRegisteredClaimNames.Sub, login.UserName),
+                            new Claim("fullName", login.UserFullName.ToString()),
+                            new Claim("roles", login.Roles),
+                            new Claim("contractorId",login.ContractorId.ToString()),
+                            new Claim("userId",login.UserId.ToString()),
+                            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                        };
+            var token = new JwtSecurityToken(
+                issuer: ConfigSetting("Jwt:Issuer"),
+                audience: ConfigSetting("Jwt:Audience"),
+                claims: claims,
+                expires: DateTime.Now.AddMinutes(1),
+                signingCredentials: credentials
+            );
+
+            var refreshToken = UpdateRefreshToken(login.UserName);
+
+            return Ok(new
+            {
+                token = new JwtSecurityTokenHandler().WriteToken(token),
+                refreshToken = refreshToken.RefreshToken,
+                login
+            });
+
+
+        }
     }
 }
