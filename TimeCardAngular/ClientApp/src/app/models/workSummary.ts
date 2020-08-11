@@ -9,6 +9,8 @@ export class WorkSummary {
   get workPeriodDescr(): string {
     return DateRef.toString(DateRef.periodEndDate(this.workPeriod));
   }
-
+  groupCount: number;
+  lastInGroup: boolean;
+  runningGroupHours: number;
 }
 

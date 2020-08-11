@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { SelectListItem } from '../models/selectListItem';
 import { Observable } from 'rxjs';
 import { Work } from '../models/work';
+import { WorkSummary } from '../models/workSummary';
 
 @Injectable({
   providedIn: 'root'
@@ -21,5 +22,9 @@ export class WorkService {
 
   detailJob(jobId: number) :Observable<Work[]>{
     return this.http.get<Work[]>("api/Work/DetailJob", { params: new HttpParams().set("jobId", jobId.toString()) });
+  }
+
+  summaryJob(): Observable<WorkSummary[]> {
+    return this.http.get<WorkSummary[]>("api/Work/SummaryJob");
   }
 }

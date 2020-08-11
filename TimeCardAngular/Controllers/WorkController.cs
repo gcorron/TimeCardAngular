@@ -55,7 +55,7 @@ namespace TimeCardAngular.Controllers
         [HttpGet]
         public ActionResult WorkSummaryJob()
         {
-            var summary = _WorkRepo.GetWorkSummary(ContractorId);
+            var summary = _WorkRepo.GetWorkSummary(ContractorId).OrderBy(x => x.Descr).ThenBy(x => x.WorkPeriod);
             return Ok(summary);
         }
 
