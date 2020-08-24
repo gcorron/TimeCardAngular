@@ -11,7 +11,8 @@ import { SelectListItem } from '../models/selectListItem';
 enum EditMode {
   off,
   new,
-  adjust
+  adjust,
+  descr
 }
 
 @Component({
@@ -26,6 +27,7 @@ export class JobComponent implements OnInit {
   editJobId: number;
   editMode: EditMode;
   editDate: Date;
+  editDescr: string;
   jobAdd: JobAdd;
   jobSave: JobSave;
 
@@ -58,10 +60,28 @@ export class JobComponent implements OnInit {
     this.editMode = EditMode.adjust;
     this.setEditDate()
   }
+  descrStart(jobId: number) {
+    this.editJobId = jobId;
+    this.editMode = EditMode.descr;
+    const job = this.jobs.find(j => j.jobId == this.editJobId);
+    this.editDescr = job.descr;
+  }
   private setEditDate() {
     const job = this.jobs.find(j => j.jobId == this.editJobId);
     this.editDate = job.startDate;
     console.log('setEditDate', {jobId: this.editJobId})
+  }
+
+  private descrSave() {
+    const job = this.jobs.find(j => j.jobId == this.editJobId);
+    const saveJob = Object.assign(job);
+    saveJob.descr = this.editDescr;
+    console.log('before', { saveJob: saveJob } );
+    this.jobService.saveJobDescr(saveJob).subscribe(() => {
+      console.log('after');
+      job.descr = this.editDescr;
+      this.editMode = EditMode.off;
+    });
   }
 
   setJobDate() {
@@ -109,6 +129,9 @@ export class JobComponent implements OnInit {
   }
   get editingAdjust(): boolean {
     return this.editMode == EditMode.adjust;
+  }
+  get editingDescr(): boolean {
+    return this.editMode == EditMode.descr;
   }
 
   addRemoveOpen(modal: NgbModal) {

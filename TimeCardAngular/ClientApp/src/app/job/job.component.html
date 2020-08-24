@@ -21,14 +21,18 @@
           <td>{{job.client}}</td>
           <td>{{job.project}}</td>
           <td>{{job.billTypeDescr}}</td>
-          <td>{{job.descr}}</td>
+          <td>
+            <a *ngIf="!(editing == true && editJobId == job.jobId && editingDescr)" style="cursor:pointer;" (click)="descrStart(job.jobId)">{{job.descr}}</a>
+            <input *ngIf="editing == true && editJobId == job.jobId && editingDescr" class="form-control" [(ngModel)]="editDescr" />
+          </td>
           <td>
             <span class="span-date" *ngIf="editing == false || editJobId != job.jobId">{{job.startDate | date:'MM/dd/yy' }}</span>
-            <input type="date" class="form-control edit-date" placeholder="- None -" [ngModel]="editDate | date:'yyyy-MM-dd'" (ngModelChange)="editDate = $event" *ngIf="editing == true && editJobId == job.jobId" />
+            <input type="date" class="form-control edit-date" placeholder="- None -" [ngModel]="editDate | date:'yyyy-MM-dd'" (ngModelChange)="editDate = $event" *ngIf="editing == true && editJobId == job.jobId && (editingNew || editingAdjust)" />
           </td>
           <td>
             <button type="button" class="btn btn-default fa fa-pencil" title="Adjust Start Date" *ngIf="editing==false || job.jobId != editJobId" (click)="adjustStart(job.jobId)"></button>
             <button type="button" class="btn btn-default fa fa-plus" title="Create New Start Date" *ngIf="editing==false || job.jobId != editJobId" (click)="newStart(job.jobId)"></button>
+            <button type="button" class="btn btn-default fa fa-check" title="Save Description" *ngIf="job.jobId == editJobId && editing == true && editingDescr == true" (click)="descrSave()"></button>
             <button type="button" class="btn btn-success btn-sm btn-create" *ngIf="job.jobId == editJobId && editingNew == true" (click)="setJobDate()">Create New Start Date</button>
             <button type="button" class="btn btn-primary btn-sm btn-adjust" *ngIf="job.jobId == editJobId && editingAdjust == true" (click)="setJobDate()">Adjust Start Date</button>
 
@@ -38,7 +42,6 @@
     </table>
   </div>
 </div>
-
 
 <ng-template #modal let-modal>
   <div class="modal-content">

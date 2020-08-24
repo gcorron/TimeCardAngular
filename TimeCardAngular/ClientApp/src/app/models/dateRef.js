@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.DateRef = void 0;
 var DateRef = /** @class */ (function () {
     function DateRef() {
     }
@@ -11,8 +12,8 @@ var DateRef = /** @class */ (function () {
         if (date < refDate) {
             return 0;
         }
-        var days = (date.getTime() - refDate.getTime()) / this.dayTicks;
-        return Math.floor(days / 14) + days % 14;
+        var days = Math.floor((date.getTime() - refDate.getTime()) / this.dayTicks);
+        return Math.floor(days / 14) + (days % 14) / 100;
     };
     DateRef.currentWorkCycle = function () {
         return Math.floor(this.getWorkDay(new Date()));

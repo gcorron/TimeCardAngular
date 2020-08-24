@@ -34,4 +34,9 @@ export class JobService {
     return this.http.post<void>('api/Job/DeleteJob', jobId);
   }
 
+  saveJobDescr(job: Job): Observable<void> {
+    console.log('saveJobDescr', { job: job });
+    return this.http.post<void>('api/Job/SaveJobDescr', job);
+  }
+
 }

@@ -20,6 +20,7 @@ import { WorkComponent } from './work/work.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ForbidComponent } from './forbid/forbid.component';
 import { WorkDatePipe } from './pipes/workDate';
+import { WorkResolver } from './models/work.resolver';
 
 @NgModule({
   declarations: [
@@ -49,11 +50,12 @@ import { WorkDatePipe } from './pipes/workDate';
       { path: 'account', component: AccountComponent, canActivate: [AdminGuard] },
       { path: 'job', component: JobComponent, canActivate: [AdminGuard] },
       { path: 'payment', component: PaymentComponent, canActivate: [AdminGuard] },
-      { path: 'work', component: WorkComponent, canActivate: [AdminGuard] },
+      { path: 'work', component: WorkComponent, canActivate: [AdminGuard], resolve: [WorkResolver] },
     ])
   ],
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: HttpInterceptorService, multi: true },
-  { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptorService, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptorService, multi: true },
+    WorkResolver
   ],
   bootstrap: [AppComponent] 
 })

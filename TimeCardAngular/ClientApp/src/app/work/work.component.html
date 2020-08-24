@@ -1,20 +1,149 @@
-<ul ngbNav [(activeId)]="activeTab" #nav="ngbNav" (navChange)="tabClick($event)" class="nav-tabs">
+<ul ngbNav #nav="ngbNav" (navChange)="tabClick($event)" class="nav-tabs">
   <li [ngbNavItem]="0">
     <a ngbNavLink>Edit</a>
     <ng-template ngbNavContent>
-      <select [(ngModel)]="selectedCycle" name="selectedCycle" class="form-control">
-        <option *ngFor="let item of cycles" value="{{item.value}}">{{item.text}}</option>
-      </select>
+      <form id="formWork" autocomplete="off">
+        <div style="display:flex; flex-direction:column; max-height:calc(90vh - 100px);">
+          <div class="card">
+            <div class="card-header">
+              <div class="form-group row">
+                <label asp-for="SelectedCycle" class="col-md-2 col-form-label">Work Period</label>
+                <div class="col-md-3">
+                  <select [(ngModel)]="selectedCycle" name="selectedCycle" class="form-control">
+                    <option *ngFor="let item of vm.payCycles" value="{{item.value}}">{{item.text}}</option>
+                  </select>
+                </div>
+                <div *ngIf="vm.canCloseCycle" class="col-md-2">
+                  <button (click)="openClose()" class="cancel btn" [ngClass]="vm.isCycleOpen ? 'btn-secondary' : 'btn-success'">{{vm.isCycleOpen ? 'Close' : 'Open'}}</button>
+                </div>
+                <div class="col-md-2 ml-auto text-right">
+                  <button class="btn btn-primary" type="button" (click)="generate()">Get Time Cards</button>
+                </div>
+                <div class="col-md-5 alert alert-warning" id="alertHeader" *ngIf ="alertMessage">alertMessage</div>
+              </div>
+              <table class="table table-bordered table-sm my-table-centered mt-3">
+                <thead>
+                  <tr>
+                    <th>Sat</th>
+                    <th>Sun</th>
+                    <th>Mon</th>
+                    <th>Tue</th>
+                    <th>Wed</th>
+                    <th>Thu</th>
+                    <th>Fri</th>
+                    <th>Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let i of [0,1]">
+                    <td *ngFor="let j of [0,1,2,3,4,5,6,7]">{{vm.dailyTotals[i][j] | number: "1.2-2"}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div *ngIf ="vm.isCycleOpen" class="card-body pb-1" [ngClass]="vm.editWork.workId ==0 ? 'bg-success' : 'bg-info'">
+              <div class="form-group form-row">
+                <label class="col-form-label col-md-1">Date</label>
+                <div class="col-md-2">
+                  <select [(ngModel)]="vm.editWork.workDay" name="selectedWorkDay" class="form-control">
+                    <option *ngFor="let item of vm.editDays" value="{{item.value}}">{{item.text}}</option>
+                  </select>
+                </div>
+                <label class="col-form-label col-md-1 text-right">Job</label>
+                <div class="col-md-3">
+                  <select [(ngModel)]="vm.editWork.jobId" name="selectedJobId" class="form-control">
+                    <option *ngFor="let item of vm.jobs" value="{{item.value}}">{{item.text}}</option>
+                  </select>
+                </div>
+                <div class="col-md-1 col-form-label text-right">Type</div>
+                <div class="col-md-2">
+                  <select [(ngModel)]="vm.editWork.workType" name="selectedWorkType" class="form-control">
+                    <option *ngFor="let item of vm.workTypes" value="{{item.value}}">{{item.text}}</option>
+                  </select>
+                </div>
+                <label class="col-form-label col-md-1">Hours</label>
+                <div class="col-md-1">
+                  <input [(ngModel)]="vm.editWork.hours" name="hours" class="form-control" type="number" min="0" max="8" step="0.25" />
+                </div>
+              </div>
+              <div class="form-group form-row mb-0">
+                <label class="col-form-label col-md-1">Descr</label>
+                <div class="col-md-9">
+                  <input [(ngModel)]="vm.editWork.descr" name="descr" class="form-control" style="min-width:100%;" />
+                </div>
+                <div id="divEditButtons" class="col-md-2 text-right">
+                  <button class="btn btn-default fa fa-2x fa-plus edit-button" type="button" title="Add" (click)="addWork()"></button>
+                  <button class="btn btn-default fa fa-2x fa-times edit-button cancel" *ngIf="vm.editWork.workId!=0" title="Delete" type="button" (click)="deleteWork()"></button>
+                  <button class="btn btn-default fa fa-2x fa-check" value="Save" title="Save" type="button" (click)="saveWork()" *ngIf="canSave"></button>
+                </div>
+              </div>
+              <div *ngIf="errorMessage" class="alert alert-danger offset-1 col-md-10">
+                <div>{{errorMessage}}</div>
+              </div>
+            </div>
+          </div>
+          <div style="flex-grow:1;overflow-y:auto; overflow-x:hidden; position:relative;">
+            <div class="row">
+              <div class="col-md-12">
+                <table class="table table-sm table-striped table-bordered table-hover">
+                  <thead class="sticky">
+                    <tr>
+                      <th class="work-col-1">Date</th>
+                      <th class="work-col-2">Job</th>
+                      <th class="work-col-1 text-right">Hours</th>
+                      <th class="work-col-1">Type</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let entry of vm.workEntries" class="work-row" (click)="editWork(entry.workId)">
+                      <td class="work-col-1">{{entry.workDate}}</td>
+                      <td class="work-col-2">{{entry.job}}</td>
+                      <td class="work-col-1 text-right">{{entry.hours | number: "1.2-2"}}</td>
+                      <td class="work-col-1">{{entry.workTypeDescr}}</td>
+                      <td>{{entry.descr}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
     </ng-template>
   </li>
   <li [ngbNavItem]="1">
     <a ngbNavLink>Summary by Period</a>
-    <ng-template ngbNavContent>Summary by Period works!</ng-template>
+    <ng-template ngbNavContent>
+      <div class="row mt-3" style="max-height:700px; overflow-y:auto; position:relative;">
+        <div class="col-md-8 offset-2">
+          <table class="table table-bordered table-hover table-sm">
+            <thead class="sticky">
+              <tr>
+                <th style="width:25%;">Work Period</th>
+                <th style="width:45%;">Job</th>
+                <th style="width:15%;" class="text-right">Hours</th>
+                <th style="width:15%;" class="text-right">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of summary">
+                <td *ngIf="item.groupCount > 0" [attr.rowspan]="item.groupCount">{{item.workPeriodDescr}}</td>
+                <td>{{item.descr}}</td>
+                <td class="hours-col text-right">{{item.hours | number: "1.2-2"}}</td>
+                <td *ngIf="item.groupCount > 0"  [attr.rowspan]="item.groupCount" class="hours-col text-right align-bottom">{{item.runningGroupHours | number: "1.2-2"}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </ng-template>
   </li>
   <li [ngbNavItem]="2">
     <a ngbNavLink>Summary by Job</a>
     <ng-template ngbNavContent>
-      <div *ngIf="summaryJob != null" class="row mt-3" style="max-height:700px; overflow-y:auto; position:relative;">
+      <div *ngIf="summary != null" class="row mt-3" style="max-height:700px; overflow-y:auto; position:relative;">
         <div class="col-md-8 offset-2">
           <table class="table table-bordered table-hover table-sm">
             <thead class="sticky">
@@ -26,7 +155,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let item of summaryJob">
+              <tr *ngFor="let item of summary">
                 <td *ngIf="item.groupCount > 0"  [attr.rowspan]="item.groupCount">{{item.descr}}</td>
                 <td>{{item.workPeriodDescr}}</td>
                 <td class="hours-col text-right">{{item.hours | number: "1.2-2"}}</td>
@@ -45,10 +174,10 @@
     <a ngbNavLink>Detail by Job</a>
     <ng-template ngbNavContent>
       <div class="row mt-4">
-        <label class="col-form-label col-2">Job {{selectedJob}}</label>
+        <label class="col-form-label col-2">Job</label>
         <div class="col-3">
           <select [(ngModel)]="selectedJob" name="selectedJob" class="form-control">
-            <option *ngFor="let item of jobs" [ngValue]="item.value" selected="{{item.value == selectedJob}}">{{item.text}}</option>
+            <option *ngFor="let item of vm.jobs" value="{{item.value}}">{{item.text}}</option>
           </select>
         </div>
       </div>

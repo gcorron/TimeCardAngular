@@ -9,6 +9,7 @@ export class Job {
   project: string;
   active: boolean;
   startDay: number;
+  descr: string;
   get startDate(): Date {
     if (this.startDay == 0) {
       return null;

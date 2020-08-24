@@ -1,0 +1,11 @@
+.work-col-1 {
+  width: 5%;
+}
+
+.work-col-2 {
+  width: 25%;
+}
+
+table.my-table-centered th, table.my-table-centered td {
+  text-align: center;
+}

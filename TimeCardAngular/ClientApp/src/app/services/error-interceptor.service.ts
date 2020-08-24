@@ -13,7 +13,7 @@ export class ErrorInterceptorService implements HttpInterceptor {
   constructor(private authService: AuthService, private router: Router) { }
 
   private _refreshSubject = new Subject<any>();
-
+  
   private _ifTokenExpired() {
     this._refreshSubject.subscribe({
       complete: () => {
@@ -41,6 +41,10 @@ export class ErrorInterceptorService implements HttpInterceptor {
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(request).pipe(catchError(err => {
       if (err instanceof HttpErrorResponse && err.status === 401) {
+        if (this.authService.triedRefresh) {
+          this.authService.logout();
+          return;
+        }
         //try refresh
         return this._ifTokenExpired().pipe(
           switchMap(() => {

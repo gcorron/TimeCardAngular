@@ -4,6 +4,9 @@ exports.Work = void 0;
 var dateRef_1 = require("./dateRef");
 var Work = /** @class */ (function () {
     function Work() {
+        this.workId = 0;
+        this.hours = 0;
+        this.descr = "";
     }
     Object.defineProperty(Work.prototype, "workDate", {
         get: function () {

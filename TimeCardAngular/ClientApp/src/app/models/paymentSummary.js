@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.PaymentSummary = void 0;
 var dateRef_1 = require("./dateRef");
 var PaymentSummary = /** @class */ (function () {
     function PaymentSummary() {
@@ -9,7 +10,7 @@ var PaymentSummary = /** @class */ (function () {
         get: function () {
             return dateRef_1.DateRef.toString(dateRef_1.DateRef.getWorkDate(this.startDay));
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(PaymentSummary.prototype, "paidThruDate", {
@@ -19,7 +20,7 @@ var PaymentSummary = /** @class */ (function () {
             }
             return dateRef_1.DateRef.toString(dateRef_1.DateRef.getWorkDate(this.paidThruDay));
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return PaymentSummary;

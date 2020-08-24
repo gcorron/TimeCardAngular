@@ -44,7 +44,10 @@ namespace TimeCard.Repo.Repos
         {
             ExecuteSp("iJob", new { clientId, projectId, billType });
         }
-
+        public void SaveJobDescr(int contractorId, int jobId, string descr)
+        {
+            ExecuteSp("uJobDescr", new { contractorId, jobId, descr });
+        }
         public void DeleteJob(int jobId)
         {
             ExecuteSp("dJob", new { jobId });

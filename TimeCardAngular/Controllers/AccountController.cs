@@ -112,7 +112,7 @@ namespace TimeCardAngular.Controllers
             var login = _AppUserRepo.LoginRefresh(new AppUserRefreshToken { UserName = username, RefreshToken = tokenApiModel.RefreshToken, RefreshTokenExpired = DateTime.Now });
             if (login.Result != "OK")
             {
-                return BadRequest("Invalid client request");
+                return Unauthorized(); 
             }
             var refreshToken = UpdateRefreshToken(username);
             return LoginOk(login);

@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Payment = void 0;
 var Payment = /** @class */ (function () {
     function Payment() {
         this.payId = 0;

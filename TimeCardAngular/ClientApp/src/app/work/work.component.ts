@@ -3,6 +3,9 @@ import { SelectListItem } from '../models/selectListItem';
 import { WorkService } from "../services/work.service";
 import { Work } from '../models/work';
 import { WorkSummary } from '../models/workSummary';
+import { WorkViewModel } from '../models/workViewModel';
+import { DateRef } from '../models/dateRef';
+import { ZipDownload } from '../models/zipDownload';
 
 @Component({
   selector: 'app-work',
@@ -12,33 +15,31 @@ import { WorkSummary } from '../models/workSummary';
 export class WorkComponent implements OnInit {
 
   constructor(private workService: WorkService) {
-    workService.cycles().subscribe(x => {
-      this.cycles = x;
-      this.selectedCycle = Number(this.cycles[0].value);
-      this.selectedJob = 0;
-    });
+    this.selectedJob = 0;
   }
 
   cycles: SelectListItem[];
   jobs: SelectListItem[];
   jobDetail: Work[];
-  summaryJob: WorkSummary[];
+  summary: WorkSummary[];
   
-
-  private _selectedCycle = 0;
   private _selectedJob = 0;
+
+  get vm(): WorkViewModel {
+    return this.workService.vm;
+  }
+
   get selectedCycle(): number {
-    return this._selectedCycle;
+    return this.vm.selectedCycle;
   }
   set selectedCycle(val: number) {
-    if (val != this._selectedCycle) {
-      this._selectedCycle = val;
+    if (val != this.vm.selectedCycle) {
+      this.vm.selectedCycle = val;
       this.workService.jobs(val).subscribe(x => {
         this.jobs = x;
         if (!x.find(y => y.value == this.selectedJob.toString())) {
           this.selectedJob = 0;
         }
-        
       });
     }
   }
@@ -55,21 +56,80 @@ export class WorkComponent implements OnInit {
     return this.jobDetail.map(detail => detail.hours).reduce((acc, cur) => acc + cur, 0);
   }
 
-  tabClick(e) {
-    if (e.nextId == 2) {
-      this.retrieveSummary();
+  // methods
+
+  editWork(workId: number) {
+    Object.assign(this.vm.editWork, this.vm.workEntries.find(x => x.workId == workId));
+  }
+
+  addWork() {
+    const newWork = new Work();
+    const tuday = DateRef.getWorkDay(new Date());
+    if (this.vm.editDays.find(x => x.value == tuday.toString())) {
+      this.vm.editWork.workDay = tuday;
+    }
+    Object.assign(this.vm.editWork, newWork);
+  }
+
+  saveWork() {
+    this.workService.save(this.vm.editWork);
+  }
+
+  deleteWork() {
+    if (confirm('Delete work entry?')) {
+      this.workService.delete(this.vm.editWork);
     }
   }
+
+  tabClick(e) {
+    if (e.nextId == 1) {
+      this.retrieveSummary();
+    }
+    if (e.nextId == 2) {
+      this.retrieveSummaryJob();
+    }
+  }
+
   retrieveSummary() {
-    this.summaryJob = null;
-    this.workService.summaryJob().subscribe(x => {
-      this.summaryJob = x;
-      let jobId = 0;
+    this.summary = null;
+    this.workService.summary().subscribe(x => {
+      this.summary = x;
+      let period = 0;
       let groupIndex = 0;
-      const finalIndex = this.summaryJob.length - 1;
+      const finalIndex = this.summary.length - 1;
 
       let runningHours = 0;
-      this.summaryJob.forEach((v, i, a) => {
+      this.summary.forEach((v, i, a) => {
+        if (i == finalIndex) {
+          v.lastInGroup = true;
+        }
+        if (v.workPeriod != period) {
+          if (period != 0) {
+            a[i - 1].lastInGroup = true;
+          }
+          groupIndex = i;
+          v.groupCount = 0;
+          period = v.workPeriod;
+          runningHours = 0;
+        }
+        a[groupIndex].groupCount++;
+        runningHours += v.hours;
+        a[groupIndex].runningGroupHours = runningHours;
+      });
+
+    });
+  }
+
+  retrieveSummaryJob() {
+    this.summary = null;
+    this.workService.summaryJob().subscribe(x => {
+      this.summary = x;
+      let jobId = 0;
+      let groupIndex = 0;
+      const finalIndex = this.summary.length - 1;
+
+      let runningHours = 0;
+      this.summary.forEach((v, i, a) => {
         if (i == finalIndex) {
           v.lastInGroup = true;
         }
@@ -86,10 +146,26 @@ export class WorkComponent implements OnInit {
         runningHours += v.hours;
         v.runningGroupHours = runningHours;
       });
-      console.log(this.summaryJob);
     });
   }
 
+  generate() {
+    this.workService.generate(this.selectedCycle)
+      .subscribe(x => {
+        console.log(x);
+        if (x.success) {
+          window.location.href = "api/Work/Download?upd=" + new Date().getTime(); //prevent browser caching
+          }
+        else {
+          console.log(x.message);
+          }
+      });
+  }
+
+  get canSave(): boolean {
+    const work = this.vm.editWork;
+    return work.hours > 0 && work.hours <= 8 && (work.hours * 4 % 1 == 0) && work.workType > 0 && work.jobId > 0 && work.descr.trim() != '';
+  }
   ngOnInit() {
   }
 

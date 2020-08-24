@@ -24,6 +24,7 @@ export class PaymentEditComponent implements OnInit {
   get selectedClient(): string { return this.bridgeService.selectedClient; }
   get selectedProject(): string { return this.bridgeService.selectedProject; }
   get selectedBillType(): string { return this.bridgeService.selectedBillType; }
+  get selectedJobId(): number { return this.bridgeService.selectedPaymentJob;}
   get isTimeCard(): boolean { return this.bridgeService.selectedBillType == 'TC'; }
 
   get canSave(): boolean {

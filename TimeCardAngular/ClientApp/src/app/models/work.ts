@@ -16,4 +16,10 @@ export class Work {
   get weekDay(): number {
     return (this.workDay % 1) * 100;
   }
+
+  constructor() {
+    this.workId = 0;
+    this.hours = 0;
+    this.descr = "";
+  }
 }

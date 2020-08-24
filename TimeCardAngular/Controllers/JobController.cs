@@ -53,6 +53,13 @@ namespace TimeCardAngular.Controllers
             _JobRepo.SaveJob(jobSave.SelectedClientId, jobSave.SelectedProjectId, jobSave.SelectedBillTypeId);
         }
 
+        [Route("SaveJobDescr")]
+        [HttpPost]
+        public void SaveDescr(Job job)
+        {
+            _JobRepo.SaveJobDescr(ContractorId, job.JobId, job.Descr);
+        }
+
         [Route("DeleteJob")]
         [HttpPost]
         public void DeleteJob([FromBody] int jobId)

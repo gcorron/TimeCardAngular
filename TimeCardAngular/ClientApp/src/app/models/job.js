@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Job = void 0;
 var dateRef_1 = require("./dateRef");
 var Job = /** @class */ (function () {
     function Job() {
@@ -14,7 +15,7 @@ var Job = /** @class */ (function () {
         set: function (value) {
             this.startDay = dateRef_1.DateRef.getWorkDay(value);
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return Job;

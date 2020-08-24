@@ -13,10 +13,12 @@ import { TokenApiModel } from '../models/tokenApiModel';
 export class AuthService {
 
   userData = new BehaviorSubject<User>(new User());
+  triedRefresh: boolean = false;
 
   constructor(private http: HttpClient, private router: Router) { }
 
   login(userDetails) {
+    this.triedRefresh = false;
     return this.http.post<any>('/api/Account/Login', userDetails)
       .pipe(map(response => {
         if (response.token) {
@@ -33,7 +35,7 @@ export class AuthService {
     tokenApiModel.authToken = localStorage.getItem('authToken');
     tokenApiModel.refreshToken = localStorage.getItem('refreshToken');
     console.log('refreshLogin', { m: tokenApiModel });
-
+    this.triedRefresh = true;
     return this.http.post<any>('/api/Account/Refresh', tokenApiModel)
       .pipe(map(response => {
         if (response.token) {

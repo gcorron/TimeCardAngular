@@ -12,8 +12,8 @@ export class DateRef {
       return 0;
     }
 
-    const days: number = (date.getTime() - refDate.getTime()) / this.dayTicks;
-    return Math.floor(days / 14) + days % 14;
+    const days: number = Math.floor((date.getTime() - refDate.getTime()) / this.dayTicks);
+    return Math.floor(days / 14) + (days % 14)/100;
 
   }
 
