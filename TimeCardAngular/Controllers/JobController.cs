@@ -46,6 +46,13 @@ namespace TimeCardAngular.Controllers
             _JobRepo.UpdateJobStart(ContractorId, jobStart.JobId, startDay, jobStart.IsNew);
         }
 
+        [Route("SetJobClosed")]
+        [HttpPost]
+        public void SetJobClosed(JobStartViewModel jobStart)
+        {
+            _JobRepo.UpdateJobStartClosed(ContractorId, jobStart.JobId, jobStart.Closed);
+        }
+
         [Route("SaveJob")]
         [HttpPost]
         public void SaveJob(JobSaveViewModel jobSave)

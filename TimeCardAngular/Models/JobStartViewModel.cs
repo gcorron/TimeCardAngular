@@ -10,5 +10,6 @@ namespace TimeCardAngular.Models
         public int JobId { get; set; }
         public string StartDate { get; set; }
         public bool IsNew { get; set; }
+        public bool Closed { get; set; }
     }
 }

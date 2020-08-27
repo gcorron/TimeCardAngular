@@ -12,6 +12,7 @@
           <th class="job-col">Project</th>
           <th class="job-col">Bill Type</th>
           <th class="job-col-2">Description</th>
+          <th class="job-col text-center">Closed</th>
           <th class="job-col">Start Date</th>
           <th></th>
         </tr>
@@ -24,6 +25,9 @@
           <td>
             <a *ngIf="!(editing == true && editJobId == job.jobId && editingDescr)" style="cursor:pointer;" (click)="descrStart(job.jobId)">{{job.descr}}</a>
             <input *ngIf="editing == true && editJobId == job.jobId && editingDescr" class="form-control" [(ngModel)]="editDescr" />
+          </td>
+          <td class="text-center">
+            <input type="checkbox" [ngModel]="job.closed" name="closed" (click)="toggleClosed(job.jobId)" class="form-check-input">
           </td>
           <td>
             <span class="span-date" *ngIf="editing == false || editJobId != job.jobId">{{job.startDate | date:'MM/dd/yy' }}</span>

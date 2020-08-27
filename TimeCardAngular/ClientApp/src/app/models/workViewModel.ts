@@ -13,4 +13,5 @@ export class WorkViewModel {
   canCloseCycle: boolean;
   selectedCycle: number;
   action: string;
+  sorted: boolean;
 }

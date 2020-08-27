@@ -10,6 +10,7 @@ export class Job {
   active: boolean;
   startDay: number;
   descr: string;
+  closed: boolean;
   get startDate(): Date {
     if (this.startDay == 0) {
       return null;

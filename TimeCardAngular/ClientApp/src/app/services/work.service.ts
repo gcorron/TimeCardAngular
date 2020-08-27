@@ -8,12 +8,14 @@ import { WorkViewModel } from '../models/workViewModel';
 import { ZipDownload } from '../models/zipDownload';
 import { delay } from 'rxjs/operators';
 
+
 @Injectable({
   providedIn: 'root'
 })
 export class WorkService {
 
   constructor(private http: HttpClient) {
+
   }
 
   vm: WorkViewModel;

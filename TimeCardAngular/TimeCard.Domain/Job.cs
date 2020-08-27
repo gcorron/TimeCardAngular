@@ -12,6 +12,7 @@ namespace TimeCard.Domain
         public string Client { get; set; }
         public string Project { get; set; }
         public bool Active { get; set; }
+        public bool Closed { get; set; }
         public decimal StartDay { get; set; }
         public DateTime? StartDate
         {

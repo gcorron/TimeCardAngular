@@ -22,6 +22,10 @@ export class JobService {
     return this.http.post<void>('api/Job/SetJobDate', jobStart);
   }
 
+  setJobClosed(jobStart: JobStart): Observable<void> {
+    return this.http.post<void>('api/Job/SetJobClosed', jobStart);
+  }
+
   prepAddJob(): Observable<JobAdd> {
     return this.http.get<JobAdd>('api/Job/PrepAddJob');
   }

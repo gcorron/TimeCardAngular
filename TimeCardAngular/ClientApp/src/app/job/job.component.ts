@@ -66,12 +66,17 @@ export class JobComponent implements OnInit {
     const job = this.jobs.find(j => j.jobId == this.editJobId);
     this.editDescr = job.descr;
   }
+  toggleClosed(jobId: number) {
+    const job = this.jobs.find(j => j.jobId == jobId);
+    const jobStart = new JobStart();
+    jobStart.jobId = jobId;
+    jobStart.closed = !job.closed;
+    this.jobService.setJobClosed(jobStart).subscribe(() => job.closed = jobStart.closed);
+  }
   private setEditDate() {
     const job = this.jobs.find(j => j.jobId == this.editJobId);
     this.editDate = job.startDate;
-    console.log('setEditDate', {jobId: this.editJobId})
   }
-
   private descrSave() {
     const job = this.jobs.find(j => j.jobId == this.editJobId);
     const saveJob = Object.assign(job);

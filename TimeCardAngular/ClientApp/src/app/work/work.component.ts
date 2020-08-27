@@ -6,6 +6,11 @@ import { WorkSummary } from '../models/workSummary';
 import { WorkViewModel } from '../models/workViewModel';
 import { DateRef } from '../models/dateRef';
 import { ZipDownload } from '../models/zipDownload';
+enum SortBy {
+  Date,
+  Job
+}
+
 
 @Component({
   selector: 'app-work',
@@ -16,16 +21,22 @@ export class WorkComponent implements OnInit {
 
   constructor(private workService: WorkService) {
     this.selectedJob = 0;
+    this.sortBy = SortBy.Date;
   }
 
+  sortBy: SortBy;
   cycles: SelectListItem[];
   jobs: SelectListItem[];
   jobDetail: Work[];
   summary: WorkSummary[];
   
+  
   private _selectedJob = 0;
 
   get vm(): WorkViewModel {
+    if (this.workService.vm.sorted == false) {
+      this.sortEntries(null);
+    }
     return this.workService.vm;
   }
 
@@ -166,7 +177,24 @@ export class WorkComponent implements OnInit {
     const work = this.vm.editWork;
     return work.hours > 0 && work.hours <= 8 && (work.hours * 4 % 1 == 0) && work.workType > 0 && work.jobId > 0 && work.descr.trim() != '';
   }
+
+  sortEntries(column) {
+    switch (column) {
+      case "Date":
+        this.sortBy = SortBy.Date;
+        break;
+      case "Job":
+        this.sortBy = SortBy.Job;
+        break;
+    }
+    this.workService.vm.workEntries.sort((a, b) => this.sortBy == SortBy.Job ? a.job.localeCompare(b.job) : a.workDay - b.workDay);
+    this.workService.vm.sorted = true;
+  }
+
   ngOnInit() {
   }
+
+
+
 
 }

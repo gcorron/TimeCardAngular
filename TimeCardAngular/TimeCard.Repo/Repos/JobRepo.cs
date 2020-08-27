@@ -22,6 +22,10 @@ namespace TimeCard.Repo.Repos
         {
             ExecuteSp("uJobStart", new { contractorId, jobId, startDay, isNew });
         }
+        public void UpdateJobStartClosed(int contractorId, int jobId, bool closed)
+        {
+            ExecuteSp("uJobStartClosed", new { contractorId, jobId, closed });
+        }
 
         public Job GetJob(int jobId)
         {

@@ -88,8 +88,8 @@
                 <table class="table table-sm table-striped table-bordered table-hover">
                   <thead class="sticky">
                     <tr>
-                      <th class="work-col-1">Date</th>
-                      <th class="work-col-2">Job</th>
+                      <th class="work-col-1" (click) = "sortEntries('Date')" style="cursor:pointer;">Date</th>
+                      <th class="work-col-2" (click) = "sortEntries('Job')" style="cursor:pointer;">Job</th>
                       <th class="work-col-1 text-right">Hours</th>
                       <th class="work-col-1">Type</th>
                       <th>Description</th>
