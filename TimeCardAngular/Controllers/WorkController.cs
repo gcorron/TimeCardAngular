@@ -155,9 +155,9 @@ namespace TimeCardAngular.Controllers
                 {
                     //create a new time card and populate it
 
-                    string endDate = new TimeCard.Domain.WorkExtended { WorkDay = (decimal)cycle }.CycleEndDate;
+                    string dateString = new TimeCard.Domain.WorkExtended { WorkDay = (decimal)cycle }.TimeCardDateString;
+                    var file = new FileInfo($"C:\\TEMP\\FWSI_TC_{dateString}_{name.Split(" ").First()}_{tc.First().Project.Replace("/", "").Replace(" ", "")}.xlsx");
 
-                    var file = new FileInfo($"C:\\TEMP\\FWSI_TC_{endDate.Replace("/", "")}_{name}_{tc.First().Client}_{tc.First().Project.Replace("/", "")}.xlsx");
                     System.IO.File.Delete(file.FullName);
                     ExcelWorksheet sheet = null;
                     using (var package = new ExcelPackage(file))
