@@ -61,7 +61,6 @@ export class PaymentEditComponent implements OnInit {
 
   savePayment() {
     this.editPayment.jobId = this.bridgeService.selectedPaymentJob;
-    this.editPayment.workDay = Number(this.editPayment.workDay);
     this.paymentService.save(this.editPayment).subscribe(() => {
       this.get();
     });
@@ -80,6 +79,12 @@ export class PaymentEditComponent implements OnInit {
   validDate(d: Date) {
     const valid: boolean = (d.getTime() !== DateRef.invalidDate().getTime());
     return valid;
+  }
+
+  setWorkPeriod(target) {
+    this.editPayment.workDay = Number(target.value);
+    this.editPayment.hours = Number(target.options[target.selectedIndex].text.split(" ")[1]);
+    console.log('setWorkPeriod', { this: this });
   }
 
 }

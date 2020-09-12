@@ -51,6 +51,7 @@ import { WorkResolver } from './models/work.resolver';
       { path: 'job', component: JobComponent, canActivate: [AdminGuard] },
       { path: 'payment', component: PaymentComponent, canActivate: [AdminGuard] },
       { path: 'work', component: WorkComponent, canActivate: [AdminGuard], resolve: [WorkResolver] },
+      { path: '', redirectTo: '/work', pathMatch: 'full'}
     ])
   ],
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: HttpInterceptorService, multi: true },

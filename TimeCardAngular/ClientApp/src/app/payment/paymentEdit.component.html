@@ -28,7 +28,7 @@
       <div *ngIf="unpaid != null" class="form-group form-row">
         <div class="col-md-2 offset-5 col-form-label text-right">Work Period</div>
         <div class="col-md-2">
-          <select [(ngModel)]="editPayment.workDay" name="workDay" class="form-control">
+          <select (change)="setWorkPeriod($event.target);" class="form-control">
             <option *ngFor="let item of unpaid" value="{{item.value}}">{{item.text}}</option>
           </select>
         </div>
