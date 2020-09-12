@@ -13,7 +13,7 @@ import { TokenApiModel } from '../models/tokenApiModel';
 export class AuthService {
 
   userData = new BehaviorSubject<User>(new User());
-  triedRefresh: boolean = false;
+  triedRefresh = false;
 
   constructor(private http: HttpClient, private router: Router) { }
 
@@ -41,6 +41,7 @@ export class AuthService {
         if (response.token) {
           localStorage.setItem('authToken', response.token);
           localStorage.setItem('refreshToken', response.refreshToken);
+          this.triedRefresh = false;
         }
         this.setUserDetails();
         return response;

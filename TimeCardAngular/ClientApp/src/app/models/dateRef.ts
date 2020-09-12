@@ -37,7 +37,7 @@ export class DateRef {
   }
 
   static toString(d: Date) {
-    return this.padLeft2(d.getMonth() + 1) + '/' + this.padLeft2(d.getDate()) + '/' + d.getFullYear.toString().slice(-2);
+    return this.padLeft2(d.getMonth() + 1) + '/' + this.padLeft2(d.getDate()) + '/' + d.getFullYear().toString().slice(-2);
   }
 
   static toDate(s: string) {

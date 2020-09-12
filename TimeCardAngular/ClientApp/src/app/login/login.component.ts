@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit {
       return;
     }
     this.loading = true;
-    const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || '/';
+    const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || '/work';
     this.authService.login(this.loginForm.value)
       .pipe(first())
       .subscribe(

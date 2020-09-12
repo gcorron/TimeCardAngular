@@ -32,7 +32,7 @@ var DateRef = /** @class */ (function () {
         return new Date(resultNumber);
     };
     DateRef.toString = function (d) {
-        return this.padLeft2(d.getMonth() + 1) + '/' + this.padLeft2(d.getDate()) + '/' + d.getFullYear.toString().slice(-2);
+        return this.padLeft2(d.getMonth() + 1) + '/' + this.padLeft2(d.getDate()) + '/' + d.getFullYear().toString().slice(-2);
     };
     DateRef.toDate = function (s) {
         var ds = s.split(/\D/).map(function (t) { return parseInt(t); });

@@ -61,6 +61,7 @@ export class PaymentEditComponent implements OnInit {
 
   savePayment() {
     this.editPayment.jobId = this.bridgeService.selectedPaymentJob;
+    this.editPayment.workDay = Number(this.editPayment.workDay);
     this.paymentService.save(this.editPayment).subscribe(() => {
       this.get();
     });
@@ -73,13 +74,11 @@ export class PaymentEditComponent implements OnInit {
   }
 
   parseDate(target: any) {
-    console.log('parseDate', { t: target, d: DateRef.toDate(target)});
     return DateRef.toDate(target);
   }
 
   validDate(d: Date) {
     const valid: boolean = (d.getTime() !== DateRef.invalidDate().getTime());
-    console.log('test', { i: DateRef.invalidDate(), d: d, v:valid });
     return valid;
   }
 
