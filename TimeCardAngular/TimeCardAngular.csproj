@@ -16,7 +16,7 @@
 
   <ItemGroup>
     <PackageReference Include="EPPlus" Version="5.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.6" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.18" />
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="3.1.6" />
     <PackageReference Include="SharpZipLib" Version="1.2.0" />
   </ItemGroup>
